@@ -6,10 +6,12 @@
 
 Dibuat oleh [Buffy](https://codebuff.com) 🤖
 
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-bakol--sego.vercel.app-000000?logo=vercel&logoColor=white)](https://bakol-sego.vercel.app/)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)](https://vite.dev)
 [![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)](#)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-CDN-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Status](https://img.shields.io/badge/status-aktif-22c55e)](#)
+
+### [🌐 Buka aplikasinya →](https://bakol-sego.vercel.app/)
 
 </div>
 
@@ -41,19 +43,11 @@ Detail kecil yang sudah diurus: isolasi data antar-seller, akun nonaktif tidak b
 
 Data awal: 7 pengguna dan 10 produk. Untuk kembali ke kondisi bersih, login sebagai admin → **Pengaturan** → **Reset Data Demo**.
 
-## Menjalankan
+## Demo
 
-```bash
-npm install     # sekali saja
-npm run dev     # http://localhost:5173
-```
+🔗 **[bakol-sego.vercel.app](https://bakol-sego.vercel.app/)** — versi live, di-hosting di Vercel.
 
-```bash
-npm run build     # hasil produksi di dist/
-npm run preview   # cek hasil build secara lokal
-```
-
-Karena memakai ES module, `index.html` **tidak bisa** dibuka langsung lewat `file://`. Hasil build memakai path relatif (`base: './'`), jadi folder `dist/` bisa ditaruh di subfolder hosting mana pun.
+Masuk memakai salah satu akun demo di atas untuk mencoba ketiga peran. Karena data disimpan di `localStorage`, setiap pengunjung mendapat salinan data demo sendiri — bebas dicoba tanpa mengganggu pengunjung lain.
 
 ## Struktur Proyek
 

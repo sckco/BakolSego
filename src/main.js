@@ -14,6 +14,7 @@ export function bindEvents() {
   $('login-form').addEventListener('submit', UI.handleLoginSubmit);
   $('login-password-toggle').addEventListener('click', UI.togglePasswordVisibility);
   $('register-form').addEventListener('submit', UI.handleRegisterSubmit);
+  $('register-password-toggle').addEventListener('click', UI.toggleRegisterPasswordVisibility);
   $('product-form').addEventListener('submit', UI.handleProductSubmit);
   $('user-form').addEventListener('submit', UI.handleUserSubmit);
 
@@ -101,6 +102,7 @@ export function registerGlobals() {
     resetCatalogFilters: UI.resetCatalogFilters,
     runConfirm: UI.runConfirm,
     togglePasswordVisibility: UI.togglePasswordVisibility,
+    toggleRegisterPasswordVisibility: UI.toggleRegisterPasswordVisibility,
 
     /* Dipakai untuk pengujian dan debugging dari konsol. */
     renderApp: UI.renderApp,

@@ -210,6 +210,7 @@ export function showRegisterView() {
   $('view-register').classList.remove('hidden');
   $('view-register').classList.add('flex');
   hideRegisterError();
+  resetPasswordVisibility();
   $('register-form').reset();
   const nameInput = $('register-name');
   if (nameInput) nameInput.focus();
@@ -847,7 +848,7 @@ function validateUserInput() {
   const editingUser = ui.editingUserId ? findUser(ui.editingUserId) : null;
 
   if (name.length < 3 || name.length > 60) errors.push('Nama harus 3–60 karakter.');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Format email tidak valid.');
+  if (!GMAIL_PATTERN.test(email)) errors.push('Email wajib memakai format nama@gmail.com.');
   const duplicate = db.users.some(u => u.email.toLowerCase() === email && (!editingUser || u.id !== editingUser.id));
   if (duplicate) errors.push('Email sudah digunakan user lain.');
   if (!['admin', 'seller', 'buyer'].includes(role)) errors.push('Peran tidak valid.');
@@ -1064,31 +1065,40 @@ export function handleRegisterSubmit(event) {
   toast(`Akun berhasil dibuat. Selamat datang, ${name.split(' ')[0]}!`, 'success');
 }
 
-export function togglePasswordVisibility() {
-  const input = $('login-password');
-  const toggle = $('login-password-toggle');
-  const show = input.type === 'password';
+function applyPasswordVisibility({ inputId, toggleId, openId, offId }, show) {
+  const input = $(inputId);
+  const toggle = $(toggleId);
+  if (!input || !toggle) return;
 
   input.type = show ? 'text' : 'password';
   toggle.setAttribute('aria-pressed', String(show));
-  toggle.setAttribute('aria-label', show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
-  toggle.title = show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi';
-  $('login-eye-open').classList.toggle('hidden', show);
-  $('login-eye-off').classList.toggle('hidden', !show);
-  input.focus();
+  const label = show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi';
+  toggle.setAttribute('aria-label', label);
+  toggle.title = label;
+  const open = $(openId);
+  const off = $(offId);
+  if (open) open.classList.toggle('hidden', show);
+  if (off) off.classList.toggle('hidden', !show);
+}
+
+const LOGIN_PASSWORD = { inputId: 'login-password', toggleId: 'login-password-toggle', openId: 'login-eye-open', offId: 'login-eye-off' };
+const REGISTER_PASSWORD = { inputId: 'register-password', toggleId: 'register-password-toggle', openId: 'register-eye-open', offId: 'register-eye-off' };
+
+export function togglePasswordVisibility() {
+  const show = $('login-password').type === 'password';
+  applyPasswordVisibility(LOGIN_PASSWORD, show);
+  $('login-password').focus();
+}
+
+export function toggleRegisterPasswordVisibility() {
+  const show = $('register-password').type === 'password';
+  applyPasswordVisibility(REGISTER_PASSWORD, show);
+  $('register-password').focus();
 }
 
 export function resetPasswordVisibility() {
-  const input = $('login-password');
-  const toggle = $('login-password-toggle');
-  if (!input || !toggle) return;
-
-  input.type = 'password';
-  toggle.setAttribute('aria-pressed', 'false');
-  toggle.setAttribute('aria-label', 'Tampilkan kata sandi');
-  toggle.title = 'Tampilkan kata sandi';
-  $('login-eye-open').classList.remove('hidden');
-  $('login-eye-off').classList.add('hidden');
+  applyPasswordVisibility(LOGIN_PASSWORD, false);
+  applyPasswordVisibility(REGISTER_PASSWORD, false);
 }
 
 export function login(email, password) {
@@ -1111,11 +1121,15 @@ export function login(email, password) {
 
 export function handleLoginSubmit(event) {
   event.preventDefault();
-  const email = $('login-email').value.trim();
+  const email = $('login-email').value.trim().toLowerCase();
   const password = $('login-password').value;
 
   if (!email || !password) {
     showLoginError('Email dan password wajib diisi.');
+    return;
+  }
+  if (!GMAIL_PATTERN.test(email)) {
+    showLoginError('Email wajib memakai format nama@gmail.com.');
     return;
   }
   login(email, password);

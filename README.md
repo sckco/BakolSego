@@ -39,11 +39,11 @@ Detail kecil yang sudah diurus: isolasi data antar-seller, akun nonaktif tidak b
 
 | Peran | Email | Password |
 | :--- | :--- | :--- |
-| Admin | `admin@bakolsego.id` | `admin123` |
-| Seller | `sari@bakolsego.id` · `joko@bakolsego.id` · `rina@bakolsego.id` | `seller123` |
-| Pembeli | `budi@bakolsego.id` · `sinta@bakolsego.id` · `dewi@bakolsego.id` | `buyer123` |
+| Admin | `admin@gmail.com` | `admin123` |
+| Seller | `sari@gmail.com` · `joko@gmail.com` · `rina@gmail.com` | `seller123` |
+| Pembeli | `budi@gmail.com` · `sinta@gmail.com` · `dewi@gmail.com` | `buyer123` |
 
-Akun demo di atas tetap bisa dipakai login walau bukan Gmail. Khusus pendaftaran mandiri, email **wajib** berformat `@gmail.com`.
+Semua akun demo memakai email **@gmail.com**. Login dan pendaftaran mandiri sama-sama mewajibkan format tersebut.
 
 Data awal: 7 pengguna dan 10 produk. Untuk kembali ke kondisi bersih, login sebagai admin → **Pengaturan** → **Reset Data Demo**.
 

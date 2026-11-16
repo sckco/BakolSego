@@ -76,7 +76,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 ### 4.1 Login
 1. Pengguna membuka aplikasi → katalog publik langsung tampil; bila sesi valid, dashboard peran dimuat otomatis.
 2. Pengguna menekan **Masuk** di kanan atas lalu mengisi email + password; ikon mata di kolom kata sandi bisa menampilkan atau menyembunyikan isinya.
-3. Sistem mencari user dengan email (case-insensitive), membandingkan hash password, dan memeriksa status aktif.
+3. Email wajib berformat `@gmail.com` (format lain ditolak sebelum autentikasi). Sistem mencari user dengan email (case-insensitive), membandingkan hash password, dan memeriksa status aktif.
 4. Gagal → pesan generik "Email atau password salah" (tidak membocorkan akun mana yang ada).
 5. Berhasil → sesi disimpan, audit log mencatat `login`, dashboard peran dirender.
 6. Logout → sesi dihapus, state UI direset, kembali ke katalog publik.
@@ -175,13 +175,13 @@ Kunci penyimpanan:
 
 | Peran | Email | Password | Catatan |
 |---|---|---|---|
-| Admin | `admin@bakolsego.id` | `admin123` | Admin BakolSego |
-| Seller | `sari@bakolsego.id` | `seller123` | Dapur Bu Sari, 3 produk |
-| Seller | `joko@bakolsego.id` | `seller123` | Sego Joko, 3 produk |
-| Seller | `rina@bakolsego.id` | `seller123` | Rina Snacks, 4 produk |
-| Pembeli | `budi@bakolsego.id` | `buyer123` | Budi Santoso |
-| Pembeli | `sinta@bakolsego.id` | `buyer123` | Sinta Maharani |
-| Pembeli | `dewi@bakolsego.id` | `buyer123` | Dewi Lestari |
+| Admin | `admin@gmail.com` | `admin123` | Admin BakolSego |
+| Seller | `sari@gmail.com` | `seller123` | Dapur Bu Sari, 3 produk |
+| Seller | `joko@gmail.com` | `seller123` | Sego Joko, 3 produk |
+| Seller | `rina@gmail.com` | `seller123` | Rina Snacks, 4 produk |
+| Pembeli | `budi@gmail.com` | `buyer123` | Budi Santoso |
+| Pembeli | `sinta@gmail.com` | `buyer123` | Sinta Maharani |
+| Pembeli | `dewi@gmail.com` | `buyer123` | Dewi Lestari |
 
 10 produk kuliner nusantara (4 makanan berat, 3 minuman, 3 camilan), termasuk satu produk stok 0 dan satu produk nonaktif untuk menguji tampilan.
 

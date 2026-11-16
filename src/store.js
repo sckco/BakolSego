@@ -151,13 +151,13 @@ export function hashPassword(password) {
    ================================================================ */
 function buildSeedUsers(createdAt) {
   return [
-    { id: 'usr-admin', name: 'Admin BakolSego', email: 'admin@bakolsego.id', passwordHash: hashPassword('admin123'), role: 'admin', phone: '6281200000001', storeName: 'BakolSego HQ', active: true, createdAt },
-    { id: 'usr-sari', name: 'Sari Wulandari', email: 'sari@bakolsego.id', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281234567890', storeName: 'Dapur Bu Sari', active: true, createdAt },
-    { id: 'usr-joko', name: 'Joko Prasetyo', email: 'joko@bakolsego.id', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281298765432', storeName: 'Sego Joko', active: true, createdAt },
-    { id: 'usr-rina', name: 'Rina Kartika', email: 'rina@bakolsego.id', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281355556666', storeName: 'Rina Snacks', active: true, createdAt },
-    { id: 'usr-budi', name: 'Budi Santoso', email: 'budi@bakolsego.id', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281211112222', storeName: '', active: true, createdAt },
-    { id: 'usr-sinta', name: 'Sinta Maharani', email: 'sinta@bakolsego.id', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281333334444', storeName: '', active: true, createdAt },
-    { id: 'usr-dewi', name: 'Dewi Lestari', email: 'dewi@bakolsego.id', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281255557777', storeName: '', active: true, createdAt }
+    { id: 'usr-admin', name: 'Admin BakolSego', email: 'admin@gmail.com', passwordHash: hashPassword('admin123'), role: 'admin', phone: '6281200000001', storeName: 'BakolSego HQ', active: true, createdAt },
+    { id: 'usr-sari', name: 'Sari Wulandari', email: 'sari@gmail.com', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281234567890', storeName: 'Dapur Bu Sari', active: true, createdAt },
+    { id: 'usr-joko', name: 'Joko Prasetyo', email: 'joko@gmail.com', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281298765432', storeName: 'Sego Joko', active: true, createdAt },
+    { id: 'usr-rina', name: 'Rina Kartika', email: 'rina@gmail.com', passwordHash: hashPassword('seller123'), role: 'seller', phone: '6281355556666', storeName: 'Rina Snacks', active: true, createdAt },
+    { id: 'usr-budi', name: 'Budi Santoso', email: 'budi@gmail.com', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281211112222', storeName: '', active: true, createdAt },
+    { id: 'usr-sinta', name: 'Sinta Maharani', email: 'sinta@gmail.com', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281333334444', storeName: '', active: true, createdAt },
+    { id: 'usr-dewi', name: 'Dewi Lestari', email: 'dewi@gmail.com', passwordHash: hashPassword('buyer123'), role: 'buyer', phone: '6281255557777', storeName: '', active: true, createdAt }
   ];
 }
 
@@ -177,6 +177,29 @@ export function seedDatabase() {
 /* ================================================================
    LAPISAN DATABASE
    ================================================================ */
+
+/** Email demo lama (@bakolsego.id) dipetakan ke Gmail agar data tersimpan ikut pindah. */
+const LEGACY_DEMO_EMAILS = {
+  'usr-admin': 'admin@gmail.com',
+  'usr-sari': 'sari@gmail.com',
+  'usr-joko': 'joko@gmail.com',
+  'usr-rina': 'rina@gmail.com',
+  'usr-budi': 'budi@gmail.com',
+  'usr-sinta': 'sinta@gmail.com',
+  'usr-dewi': 'dewi@gmail.com'
+};
+
+function migrateDemoEmails(parsed) {
+  let changed = false;
+  parsed.users.forEach(user => {
+    const nextEmail = LEGACY_DEMO_EMAILS[user.id];
+    if (nextEmail && /@bakolsego\.id$/i.test(user.email || '')) {
+      user.email = nextEmail;
+      changed = true;
+    }
+  });
+  return changed;
+}
 function persistDatabase() {
   try {
     localStorage.setItem(DB_KEY, JSON.stringify(db));
@@ -197,6 +220,7 @@ export function loadDatabase() {
     parsed.settings = parsed.settings || { storeName: 'BakolSego', whatsappNumber: '6280000000000' };
     parsed.auditLog = Array.isArray(parsed.auditLog) ? parsed.auditLog : [];
     db = parsed;
+    if (migrateDemoEmails(db)) persistDatabase();
     return db;
   } catch (err) {
     const seeded = seedDatabase();

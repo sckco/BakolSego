@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BakolSego — katalog & dashboard UMKM kuliner dengan peran admin, seller, dan pembeli." />
+  <title>BakolSego — Katalog & Dashboard UMKM Kuliner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Helvetica Neue"', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+
+  <div class="aurora-bg" aria-hidden="true">
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+  </div>
+
+  <!-- ==================================================================
+       HEADER (hanya saat login)
+       ================================================================== -->
+  <header id="app-header" class="hidden sticky top-0 z-40 ios-glass-strong border-b ios-divider">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-3 py-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="logo-badge w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shrink-0">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11h16a1 1 0 0 1 1 1v.5a7.5 7.5 0 0 1-15 0V12a1 1 0 0 1 1-1Z" />
+              <path d="M8 21h8" /><path d="M12 19.5V21" />
+              <path d="M7 11c0-2.5 2-4.5 5-4.5s5 2 5 4.5" />
+              <path d="M9 4c.5-1 1.5-1 2 0" /><path d="M13 3.5c.5-1 1.5-1 2 0" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <p class="font-display text-lg font-extrabold tracking-tight ink-primary leading-tight">BakolSego</p>
+            <p class="text-[11px] font-bold ink-muted truncate">Katalog &amp; Dashboard UMKM Kuliner</p>
+          </div>
+          <span id="header-role-chip" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold border border-orange-500/30 bg-orange-500/10 text-orange-700 dark:text-orange-300"></span>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="hidden sm:flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-2xl ios-glass-subtle">
+            <div id="header-user-initials" class="avatar-ring w-8 h-8 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center text-xs font-extrabold"></div>
+            <div class="leading-tight">
+              <p id="header-user-name" class="text-xs font-extrabold ink-primary max-w-[140px] truncate"></p>
+              <p id="header-user-sub" class="text-[10px] font-semibold ink-muted max-w-[140px] truncate"></p>
+            </div>
+          </div>
+          <button type="button" id="btn-theme-toggle" onclick="toggleTheme()" title="Ganti tema terang/gelap" aria-label="Ganti tema"
+            class="ios-tap p-2.5 rounded-2xl ios-glass-subtle ink-primary">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            </svg>
+          </button>
+          <button type="button" id="btn-logout" onclick="logout()"
+            class="ios-tap flex items-center gap-1.5 px-3 py-2.5 rounded-2xl bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold shadow-md shadow-red-600/20">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" />
+            </svg>
+            <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+      </div>
+
+      <nav id="role-nav" class="flex items-center gap-1 pb-2.5 overflow-x-auto" role="tablist" aria-label="Navigasi utama"></nav>
+    </div>
+  </header>
+
+  <!-- ==================================================================
+       LOGIN
+       ================================================================== -->
+  <section id="view-login" class="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+    <div class="w-full max-w-5xl grid lg:grid-cols-2 gap-6 items-stretch">
+
+      <div class="hero-panel relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-700 via-orange-600 to-amber-600 text-white p-7 sm:p-9 shadow-xl shadow-orange-600/20 border border-white/20 flex flex-col justify-between gap-8">
+        <div class="relative z-10 space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/25 backdrop-blur-md text-[11px] font-bold border border-white/20">
+            <span>🌿</span><span>Dapur UMKM Lokal • Sejak 2026</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Satu tempat untuk admin, seller, dan pembeli.
+          </h1>
+          <p class="text-sm sm:text-base text-orange-50 font-medium leading-relaxed">
+            Kelola akun, tayangkan menu, dan terima pesanan langsung via WhatsApp — semuanya dari satu aplikasi.
+          </p>
+        </div>
+        <ul class="relative z-10 space-y-3 text-sm font-semibold">
+          <li class="flex items-start gap-2.5"><span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-xs shrink-0">🛡️</span><span>Admin mengelola pengguna &amp; pengaturan toko</span></li>
+          <li class="flex items-start gap-2.5"><span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-xs shrink-0">🧑‍🍳</span><span>Seller mengelola produk, stok, dan harga miliknya</span></li>
+          <li class="flex items-start gap-2.5"><span class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center text-xs shrink-0">🛒</span><span>Pembeli memilih menu lalu menghubungi via WhatsApp</span></li>
+        </ul>
+        <svg class="absolute -right-10 -bottom-12 w-64 h-64 text-white/10 pointer-events-none float-slow" viewBox="0 0 200 200" fill="currentColor" aria-hidden="true">
+          <circle cx="100" cy="100" r="80" /><circle cx="150" cy="50" r="40" />
+        </svg>
+      </div>
+
+      <div class="ios-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-center animate-ios-card">
+        <div class="space-y-1 mb-5">
+          <h2 class="font-display text-xl font-extrabold ink-primary">Masuk ke akun Anda</h2>
+          <p class="text-xs font-medium ink-muted">Gunakan email dan password yang diberikan admin.</p>
+        </div>
+
+        <div id="login-error" class="hidden mb-4 p-3.5 rounded-2xl bg-red-600 text-white text-xs font-bold flex items-start gap-2 shadow-md" role="alert">
+          <span aria-hidden="true">⚠️</span><span id="login-error-text"></span>
+        </div>
+
+        <form id="login-form" novalidate class="space-y-4">
+          <div>
+            <label for="login-email" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="username" required
+              placeholder="nama@bakolsego.id"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+          </div>
+          <div>
+            <label for="login-password" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Password</label>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required
+              placeholder="••••••••"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+          </div>
+          <button type="submit"
+            class="btn-brand w-full py-3 px-4 rounded-2xl text-sm font-extrabold flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><path d="m10 17 5-5-5-5" /><path d="M15 12H3" />
+            </svg>
+            <span>Masuk</span>
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t ios-divider">
+          <p class="text-[11px] font-extrabold uppercase tracking-wider ink-muted mb-2.5">Akun demo — klik untuk mengisi</p>
+          <div id="demo-accounts" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+          <p class="mt-3 text-[11px] font-medium ink-muted leading-relaxed">
+            Aplikasi demo: data disimpan di <code class="font-bold">localStorage</code> perangkat ini dan tidak boleh dipakai untuk data pelanggan nyata.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       APLIKASI (setelah login)
+       ================================================================== -->
+  <div id="view-app" class="hidden flex-1 flex flex-col">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+      <!-- ============ KATALOG PEMBELI ============ -->
+      <section id="section-catalog" class="hidden space-y-6 animate-ios-card" aria-label="Katalog produk">
+        <div class="hero-panel relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 text-white p-6 sm:p-8 shadow-xl shadow-orange-600/20 border border-white/20">
+          <div class="relative z-10 max-w-2xl space-y-2.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/25 backdrop-blur-md text-xs font-bold border border-white/20">
+                <span>🌿</span><span>Masak Segar Setiap Hari</span>
+              </span>
+              <span id="catalog-hero-wa" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/40 backdrop-blur-md text-xs font-bold text-emerald-100 border border-emerald-400/30">
+                <svg class="w-3.5 h-3.5 fill-emerald-300 shrink-0" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+                <span>WhatsApp Toko: <strong id="catalog-hero-wa-number" class="text-white font-mono">+62 800-0000-0000</strong></span>
+              </span>
+            </div>
+            <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight">Sajian Hangat Khas Nusantara</h2>
+            <p class="text-sm sm:text-base text-orange-50 font-medium leading-relaxed">
+              Pilih menu favorit dari dapur UMKM terpilih, lalu pesan langsung ke penjualnya melalui WhatsApp.
+            </p>
+          </div>
+          <svg class="hidden md:block absolute right-6 -bottom-6 w-56 h-56 text-white/15 pointer-events-none float-slow" viewBox="0 0 200 200" fill="currentColor" aria-hidden="true">
+            <circle cx="100" cy="100" r="80" /><circle cx="150" cy="50" r="40" />
+          </svg>
+        </div>
+
+        <div class="ios-glass rounded-3xl p-4 sm:p-5 space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+            <div class="md:col-span-5 relative">
+              <label for="catalog-search" class="sr-only">Cari produk</label>
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none ink-muted">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </div>
+              <input id="catalog-search" type="text" placeholder="Cari sego, wedang, keripik..."
+                class="ios-input w-full pl-10 pr-9 py-2.5 text-sm font-medium rounded-2xl" />
+              <button id="btn-clear-search" type="button" onclick="clearCatalogSearch()" title="Hapus pencarian"
+                class="hidden absolute inset-y-0 right-0 pr-3 flex items-center ink-muted hover:ink-primary">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <div class="md:col-span-4">
+              <label for="catalog-sort" class="sr-only">Urutkan produk</label>
+              <div class="relative">
+                <select id="catalog-sort" class="ios-input w-full pl-3.5 pr-9 py-2.5 text-sm font-semibold rounded-2xl appearance-none cursor-pointer">
+                  <option value="featured">Urutkan: Unggulan Teratas</option>
+                  <option value="price-asc">Harga: Termurah ke Termahal</option>
+                  <option value="price-desc">Harga: Termahal ke Termurah</option>
+                  <option value="stock-desc">Stok: Terbanyak Tersedia</option>
+                  <option value="name-asc">Nama: A - Z</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none ink-muted">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="md:col-span-3 flex items-center md:justify-end">
+              <label class="ios-tap ios-glass-subtle inline-flex items-center gap-2.5 cursor-pointer select-none px-4 py-2.5 rounded-2xl w-full md:w-auto justify-center">
+                <input type="checkbox" id="catalog-featured-only" class="w-4 h-4 rounded accent-orange-600 cursor-pointer" />
+                <span class="text-sm font-bold ink-primary">⭐ Hanya Unggulan</span>
+              </label>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t ios-divider">
+            <div id="category-pills" class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter Kategori"></div>
+            <p id="catalog-result-count" class="text-xs font-bold ink-muted">Menampilkan 0 produk</p>
+          </div>
+        </div>
+
+        <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+
+        <div id="catalog-empty" class="hidden ios-glass rounded-3xl p-10 text-center space-y-3">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-md">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg>
+          </div>
+          <h3 class="font-display font-bold text-lg ink-primary">Menu Tidak Ditemukan</h3>
+          <p class="text-sm ink-secondary max-w-md mx-auto">Tidak ada produk aktif yang cocok dengan pencarian atau filter Anda.</p>
+          <button type="button" onclick="resetCatalogFilters()" class="btn-brand mt-2 px-4 py-2.5 rounded-2xl text-xs font-extrabold">Reset Filter</button>
+        </div>
+      </section>
+
+      <!-- ============ SELLER: PRODUK SAYA ============ -->
+      <section id="section-seller" class="hidden space-y-6 animate-ios-card" aria-label="Produk saya">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <h2 class="font-display text-2xl font-extrabold tracking-tight ink-primary">Produk Saya</h2>
+            <p class="text-sm font-medium ink-secondary">Kelola menu, harga, dan stok toko <span id="seller-store-name" class="font-extrabold ink-primary"></span>.</p>
+          </div>
+          <button type="button" id="btn-add-product" onclick="openProductModal()"
+            class="btn-brand inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-extrabold">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Tambah Produk</span>
+          </button>
+        </div>
+
+        <div id="seller-stats" class="grid grid-cols-2 lg:grid-cols-5 gap-3"></div>
+
+        <div class="ios-glass rounded-3xl overflow-hidden">
+          <div class="p-4 sm:p-5 border-b ios-divider flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="relative sm:w-80">
+              <label for="seller-search" class="sr-only">Cari produk saya</label>
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none ink-muted">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </div>
+              <input id="seller-search" type="text" placeholder="Cari nama atau kategori..." class="ios-input w-full pl-10 pr-3 py-2.5 text-sm font-medium rounded-2xl" />
+            </div>
+            <p id="seller-product-count" class="text-xs font-bold ink-muted"></p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left min-w-[760px]">
+              <thead class="text-[11px] uppercase tracking-wider ink-muted border-b ios-divider">
+                <tr>
+                  <th class="px-4 py-3 font-extrabold">Produk</th>
+                  <th class="px-4 py-3 font-extrabold">Kategori</th>
+                  <th class="px-4 py-3 font-extrabold">Harga</th>
+                  <th class="px-4 py-3 font-extrabold">Stok</th>
+                  <th class="px-4 py-3 font-extrabold">Status</th>
+                  <th class="px-4 py-3 font-extrabold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="seller-product-tbody" class="divide-y ios-divider text-sm"></tbody>
+            </table>
+          </div>
+          <div id="seller-empty" class="hidden p-10 text-center space-y-2">
+            <p class="font-display font-bold ink-primary">Belum ada produk</p>
+            <p class="text-xs ink-secondary">Klik "Tambah Produk" untuk menayangkan menu pertama Anda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ADMIN: KELOLA USER ============ -->
+      <section id="section-admin-users" class="hidden space-y-6 animate-ios-card" aria-label="Kelola user">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div>
+            <h2 class="font-display text-2xl font-extrabold tracking-tight ink-primary">Kelola User</h2>
+            <p class="text-sm font-medium ink-secondary">Buat akun, atur peran, dan nonaktifkan akses pengguna.</p>
+          </div>
+          <button type="button" id="btn-add-user" onclick="openUserModal()"
+            class="btn-brand inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-extrabold">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Tambah User</span>
+          </button>
+        </div>
+
+        <div id="admin-stats" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+
+        <div class="ios-glass rounded-3xl overflow-hidden">
+          <div class="p-4 sm:p-5 border-b ios-divider flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+            <div class="flex flex-col sm:flex-row gap-2.5 sm:items-center w-full sm:w-auto">
+              <div class="relative sm:w-72">
+                <label for="admin-user-search" class="sr-only">Cari user</label>
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none ink-muted">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <input id="admin-user-search" type="text" placeholder="Cari nama, email, atau toko..." class="ios-input w-full pl-10 pr-3 py-2.5 text-sm font-medium rounded-2xl" />
+              </div>
+              <div>
+                <label for="admin-role-filter" class="sr-only">Filter peran</label>
+                <select id="admin-role-filter" class="ios-input w-full sm:w-44 px-3.5 py-2.5 text-sm font-semibold rounded-2xl cursor-pointer">
+                  <option value="all">Semua peran</option>
+                  <option value="admin">Admin</option>
+                  <option value="seller">Seller</option>
+                  <option value="buyer">Pembeli</option>
+                </select>
+              </div>
+            </div>
+            <p id="admin-user-count" class="text-xs font-bold ink-muted"></p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left min-w-[820px]">
+              <thead class="text-[11px] uppercase tracking-wider ink-muted border-b ios-divider">
+                <tr>
+                  <th class="px-4 py-3 font-extrabold">Nama</th>
+                  <th class="px-4 py-3 font-extrabold">Peran</th>
+                  <th class="px-4 py-3 font-extrabold">Kontak</th>
+                  <th class="px-4 py-3 font-extrabold">Produk</th>
+                  <th class="px-4 py-3 font-extrabold">Status</th>
+                  <th class="px-4 py-3 font-extrabold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-user-tbody" class="divide-y ios-divider text-sm"></tbody>
+            </table>
+          </div>
+          <div id="admin-empty" class="hidden p-10 text-center space-y-2">
+            <p class="font-display font-bold ink-primary">Tidak ada pengguna yang cocok</p>
+            <p class="text-xs ink-secondary">Ubah kata kunci pencarian atau filter peran.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ADMIN: PENGATURAN ============ -->
+      <section id="section-admin-settings" class="hidden space-y-6 animate-ios-card" aria-label="Pengaturan">
+        <div>
+          <h2 class="font-display text-2xl font-extrabold tracking-tight ink-primary">Pengaturan</h2>
+          <p class="text-sm font-medium ink-secondary">Nomor WhatsApp toko, data demo, dan jejak aktivitas.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="ios-glass rounded-3xl p-5 sm:p-6 space-y-4">
+            <h3 class="font-display font-extrabold text-lg ink-primary">Toko &amp; WhatsApp</h3>
+            <div>
+              <label for="settings-store-name" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nama Toko</label>
+              <input id="settings-store-name" type="text" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+            </div>
+            <div>
+              <label for="settings-wa" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nomor WhatsApp Toko (fallback)</label>
+              <input id="settings-wa" type="text" inputmode="tel" placeholder="0812-3456-7890" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              <p id="settings-wa-preview" class="text-[11px] font-medium ink-muted mt-1.5"></p>
+            </div>
+            <button type="button" onclick="saveSettings()" class="btn-brand w-full py-2.5 px-4 rounded-2xl text-sm font-extrabold">
+              Simpan Pengaturan
+            </button>
+
+            <div class="pt-4 border-t ios-divider space-y-2.5">
+              <h4 class="font-display font-extrabold text-sm ink-primary">Zona Demo</h4>
+              <p class="text-xs ink-secondary leading-relaxed">Mengembalikan seluruh user dan produk ke data dummy awal. Perubahan Anda akan hilang.</p>
+              <button type="button" onclick="resetDemoData()" class="btn-danger px-3.5 py-2.5 rounded-2xl text-xs font-extrabold">
+                Reset Data Demo
+              </button>
+            </div>
+          </div>
+
+          <div class="ios-glass rounded-3xl p-5 sm:p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-display font-extrabold text-lg ink-primary">Jejak Aktivitas</h3>
+              <span class="text-[11px] font-bold ink-muted">200 terbaru</span>
+            </div>
+            <ul id="audit-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="ios-glass-strong border-t ios-divider mt-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+        <p class="text-xs font-bold tracking-wide ink-secondary">developed by sckco</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==================================================================
+       MODAL PRODUK
+       ================================================================== -->
+  <div id="product-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
+    <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-20 sm:p-0">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onclick="closeModal('product-modal')"></div>
+      <div class="animate-ios-modal relative inline-block align-bottom ios-glass-strong rounded-3xl text-left overflow-hidden shadow-2xl sm:my-8 sm:align-middle sm:max-w-xl w-full">
+        <form id="product-form" novalidate>
+          <div class="px-6 py-4 border-b ios-divider flex items-center justify-between gap-3">
+            <div>
+              <h3 class="font-display text-lg font-extrabold ink-primary" id="product-modal-title">Tambah Produk</h3>
+              <p class="text-xs font-medium ink-muted">Lengkapi detail menu yang akan tayang di katalog.</p>
+            </div>
+            <button type="button" onclick="closeModal('product-modal')" class="ios-tap p-2 rounded-xl ios-glass-subtle ink-primary" aria-label="Tutup">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+          <div class="px-6 py-5 space-y-4 max-h-[72vh] overflow-y-auto">
+            <input type="hidden" id="product-id" />
+            <div id="product-form-error" class="hidden p-3.5 rounded-2xl bg-red-600 text-white text-xs space-y-1 shadow-md" role="alert">
+              <p class="font-bold">⚠️ Periksa kembali isian formulir:</p>
+              <ul id="product-error-list" class="list-disc list-inside space-y-0.5 font-medium"></ul>
+            </div>
+
+            <div>
+              <label for="product-name" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nama Produk <span class="text-red-500">*</span></label>
+              <input id="product-name" type="text" required placeholder="Contoh: Sego Sambel Iwak Pe" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="product-category" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Kategori <span class="text-red-500">*</span></label>
+                <select id="product-category" class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl">
+                  <option value="Makanan Berat">Makanan Berat</option>
+                  <option value="Minuman">Minuman</option>
+                  <option value="Camilan">Camilan</option>
+                </select>
+              </div>
+              <div class="flex items-end pb-0.5">
+                <label class="ios-tap ios-glass-subtle flex items-center gap-2.5 cursor-pointer select-none px-3.5 py-2.5 rounded-2xl w-full">
+                  <input type="checkbox" id="product-featured" class="w-4 h-4 rounded accent-orange-600" />
+                  <span class="text-sm font-bold ink-primary">⭐ Unggulan</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="product-price" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Harga (Rp) <span class="text-red-500">*</span></label>
+                <input id="product-price" type="number" min="0" step="500" required placeholder="15000" class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl" />
+                <p class="text-[11px] font-medium ink-muted mt-1">Bilangan bulat, minimal 0.</p>
+              </div>
+              <div>
+                <label for="product-stock" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Stok <span class="text-red-500">*</span></label>
+                <input id="product-stock" type="number" min="0" step="1" required placeholder="10" class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl" />
+                <p class="text-[11px] font-medium ink-muted mt-1">0 = stok habis.</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="product-desc" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Deskripsi <span class="text-red-500">*</span></label>
+              <textarea id="product-desc" rows="3" required placeholder="Jelaskan isi, porsi, dan keunggulan menu..."
+                class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl"></textarea>
+              <p class="text-[11px] font-medium ink-muted mt-1">10–500 karakter.</p>
+            </div>
+
+            <div>
+              <label for="product-image" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Gambar (URL, opsional)</label>
+              <input id="product-image" type="text" placeholder="https://... atau kosongkan untuk gambar preset"
+                class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              <div id="product-preset-list" class="flex flex-wrap gap-2 mt-2"></div>
+              <div class="mt-2.5 flex items-center gap-3">
+                <img id="product-image-preview" alt="Pratinjau gambar produk" class="w-24 h-16 rounded-xl object-cover border ios-divider bg-slate-200" />
+                <p class="text-[11px] font-medium ink-muted leading-relaxed">Pratinjau gambar. Kosongkan URL untuk memakai preset kategori.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl ios-glass-subtle">
+              <div>
+                <p class="text-sm font-bold ink-primary">Tayangkan di katalog</p>
+                <p class="text-[11px] font-medium ink-muted">Jika dimatikan, produk disembunyikan dari pembeli.</p>
+              </div>
+              <input type="checkbox" id="product-active" class="w-5 h-5 rounded accent-emerald-600 cursor-pointer" checked />
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t ios-divider flex items-center justify-end gap-2.5">
+            <button type="button" onclick="closeModal('product-modal')" class="ios-tap px-4 py-2.5 rounded-2xl ios-glass-subtle text-sm font-bold ink-primary">Batal</button>
+            <button type="submit" class="btn-brand px-5 py-2.5 rounded-2xl text-sm font-extrabold">Simpan Produk</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+       MODAL USER (ADMIN)
+       ================================================================== -->
+  <div id="user-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+    <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-20 sm:p-0">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onclick="closeModal('user-modal')"></div>
+      <div class="animate-ios-modal relative inline-block align-bottom ios-glass-strong rounded-3xl text-left overflow-hidden shadow-2xl sm:my-8 sm:align-middle sm:max-w-lg w-full">
+        <form id="user-form" novalidate>
+          <div class="px-6 py-4 border-b ios-divider flex items-center justify-between gap-3">
+            <div>
+              <h3 class="font-display text-lg font-extrabold ink-primary" id="user-modal-title">Tambah User</h3>
+              <p class="text-xs font-medium ink-muted">Atur identitas, peran, dan akses pengguna.</p>
+            </div>
+            <button type="button" onclick="closeModal('user-modal')" class="ios-tap p-2 rounded-xl ios-glass-subtle ink-primary" aria-label="Tutup">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+          <div class="px-6 py-5 space-y-4 max-h-[72vh] overflow-y-auto">
+            <input type="hidden" id="user-id" />
+            <div id="user-form-error" class="hidden p-3.5 rounded-2xl bg-red-600 text-white text-xs space-y-1 shadow-md" role="alert">
+              <p class="font-bold">⚠️ Periksa kembali isian formulir:</p>
+              <ul id="user-error-list" class="list-disc list-inside space-y-0.5 font-medium"></ul>
+            </div>
+
+            <div>
+              <label for="user-name" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+              <input id="user-name" type="text" required placeholder="Contoh: Sari Wulandari" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="user-email" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Email <span class="text-red-500">*</span></label>
+                <input id="user-email" type="email" required placeholder="nama@bakolsego.id" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              </div>
+              <div>
+                <label for="user-role" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Peran <span class="text-red-500">*</span></label>
+                <select id="user-role" class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl">
+                  <option value="buyer">Pembeli</option>
+                  <option value="seller">Seller</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="user-phone" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nomor WhatsApp <span class="text-red-500">*</span></label>
+                <input id="user-phone" type="text" inputmode="tel" required placeholder="0812-3456-7890" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              </div>
+              <div id="user-store-wrap">
+                <label for="user-store" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nama Toko</label>
+                <input id="user-store" type="text" placeholder="Dapur Bu Sari" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              </div>
+            </div>
+
+            <div>
+              <label for="user-password" id="user-password-label" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Password Awal <span class="text-red-500">*</span></label>
+              <input id="user-password" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter" class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+              <p id="user-password-hint" class="text-[11px] font-medium ink-muted mt-1">Password akan disimpan dalam bentuk hash SHA-256.</p>
+            </div>
+
+            <div id="user-active-wrap" class="hidden flex items-center justify-between gap-3 p-3.5 rounded-2xl ios-glass-subtle">
+              <div>
+                <p class="text-sm font-bold ink-primary">Akun aktif</p>
+                <p class="text-[11px] font-medium ink-muted">Akun nonaktif tidak dapat login.</p>
+              </div>
+              <input type="checkbox" id="user-active" class="w-5 h-5 rounded accent-emerald-600 cursor-pointer" checked />
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t ios-divider flex items-center justify-end gap-2.5">
+            <button type="button" onclick="closeModal('user-modal')" class="ios-tap px-4 py-2.5 rounded-2xl ios-glass-subtle text-sm font-bold ink-primary">Batal</button>
+            <button type="submit" class="btn-brand px-5 py-2.5 rounded-2xl text-sm font-extrabold">Simpan User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+       MODAL KONFIRMASI
+       ================================================================== -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-[60] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onclick="closeModal('confirm-modal')"></div>
+      <div class="animate-ios-modal relative ios-glass-strong rounded-3xl text-left shadow-2xl sm:max-w-md w-full p-6 space-y-4">
+        <div class="flex items-start gap-3">
+          <div id="confirm-icon" class="w-11 h-11 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 2.9h17a2 2 0 0 0 1.7-2.9L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          </div>
+          <div class="space-y-1">
+            <h3 id="confirm-title" class="font-display text-lg font-extrabold ink-primary">Konfirmasi</h3>
+            <p id="confirm-message" class="text-sm font-medium ink-secondary leading-relaxed"></p>
+          </div>
+        </div>
+        <div id="confirm-extra"></div>
+        <div class="flex items-center justify-end gap-2.5 pt-1">
+          <button type="button" id="btn-confirm-cancel" onclick="closeModal('confirm-modal')" class="ios-tap px-4 py-2.5 rounded-2xl ios-glass-subtle text-sm font-bold ink-primary">Batal</button>
+          <button type="button" id="btn-confirm-ok" class="ios-tap px-5 py-2.5 rounded-2xl bg-red-600 hover:bg-red-700 text-white text-sm font-extrabold shadow-md shadow-red-600/20">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+       MODAL PRATINJAU WHATSAPP
+       ================================================================== -->
+  <div id="wa-modal" class="hidden fixed inset-0 z-[60] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onclick="closeModal('wa-modal')"></div>
+      <div class="animate-ios-modal relative ios-glass-strong rounded-3xl text-left shadow-2xl sm:max-w-md w-full p-6 space-y-4">
+        <div class="space-y-1">
+          <h3 id="wa-modal-title" class="font-display text-lg font-extrabold ink-primary">Pratinjau Pesan WhatsApp</h3>
+          <p class="text-xs font-medium ink-secondary">Popup diblokir. Salin pesan atau buka tautan di bawah.</p>
+        </div>
+        <textarea id="wa-preview-text" readonly rows="6" class="ios-input w-full p-3 text-xs rounded-xl font-mono"></textarea>
+        <a id="wa-open-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700 dark:text-emerald-400 hover:underline break-all"></a>
+        <div class="flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeModal('wa-modal')" class="ios-tap px-4 py-2.5 rounded-2xl ios-glass-subtle text-sm font-bold ink-primary">Tutup</button>
+          <button type="button" onclick="copyWaPreview()" class="ios-tap px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-md shadow-emerald-600/20">Salin Pesan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="fixed bottom-5 right-4 sm:right-6 z-[70] flex flex-col gap-2 items-end pointer-events-none" aria-live="polite"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

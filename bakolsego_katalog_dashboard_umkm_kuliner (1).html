@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BakolSego — Katalog & Dashboard UMKM Kuliner Nusantara</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              '-apple-system',
+              'BlinkMacSystemFont',
+              '"SF Pro Display"',
+              '"SF Pro Text"',
+              '"Helvetica Neue"',
+              'Arial',
+              'sans-serif'
+            ],
+            display: [
+              '-apple-system',
+              'BlinkMacSystemFont',
+              '"SF Pro Display"',
+              '"Helvetica Neue"',
+              'sans-serif'
+            ]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* =========================================================================
+       IOS GLASSMORPHISM & HIGH-CONTRAST ADAPTIVE THEME TOKENS
+       ========================================================================= */
+    :root,
+    [data-theme="light"] {
+      --bg-mesh: radial-gradient(circle at 12% 15%, rgba(255, 224, 178, 0.72) 0%, transparent 45%),
+                 radial-gradient(circle at 88% 12%, rgba(186, 230, 253, 0.65) 0%, transparent 45%),
+                 radial-gradient(circle at 75% 85%, rgba(167, 243, 208, 0.58) 0%, transparent 50%),
+                 linear-gradient(135deg, #F8FAFC 0%, #FFFBEB 50%, #F1F5F9 100%);
+      --glass-surface: rgba(255, 255, 255, 0.78);
+      --glass-surface-strong: rgba(255, 255, 255, 0.90);
+      --glass-surface-subtle: rgba(248, 250, 252, 0.75);
+      --glass-border: rgba(15, 23, 42, 0.10);
+      --glass-border-highlight: rgba(255, 255, 255, 0.85);
+      --glass-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+
+      /* High-contrast Dark Ink on Bright Surface */
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --accent-price: #C2410C;
+
+      /* Inputs & Controls */
+      --input-bg: rgba(255, 255, 255, 0.92);
+      --input-border: rgba(15, 23, 42, 0.16);
+      --input-text: #0F172A;
+      --input-placeholder: #64748B;
+
+      /* Segmented Control */
+      --segment-bg: rgba(15, 23, 42, 0.07);
+      --segment-pill: #FFFFFF;
+      --segment-text-active: #0F172A;
+      --segment-text-inactive: #334155;
+
+      /* Table & Dividers */
+      --divider-color: rgba(15, 23, 42, 0.09);
+      --row-hover: rgba(251, 191, 36, 0.14);
+    }
+
+    [data-theme="dark"] {
+      --bg-mesh: radial-gradient(circle at 15% 15%, rgba(234, 88, 12, 0.24) 0%, transparent 45%),
+                 radial-gradient(circle at 85% 18%, rgba(16, 185, 129, 0.20) 0%, transparent 45%),
+                 radial-gradient(circle at 50% 90%, rgba(56, 189, 248, 0.18) 0%, transparent 50%),
+                 linear-gradient(135deg, #090D16 0%, #0F172A 55%, #111827 100%);
+      --glass-surface: rgba(30, 41, 59, 0.72);
+      --glass-surface-strong: rgba(15, 23, 42, 0.88);
+      --glass-surface-subtle: rgba(30, 41, 59, 0.52);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-border-highlight: rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), 0 2px 8px -1px rgba(0, 0, 0, 0.35);
+
+      /* High-contrast Light Ink on Dark Surface */
+      --text-primary: #F8FAFC;
+      --text-secondary: #E2E8F0;
+      --text-muted: #CBD5E1;
+      --accent-price: #FDBA74;
+
+      /* Inputs & Controls */
+      --input-bg: rgba(15, 23, 42, 0.82);
+      --input-border: rgba(255, 255, 255, 0.18);
+      --input-text: #F8FAFC;
+      --input-placeholder: #94A3B8;
+
+      /* Segmented Control */
+      --segment-bg: rgba(255, 255, 255, 0.10);
+      --segment-pill: rgba(51, 65, 85, 0.95);
+      --segment-text-active: #FFFFFF;
+      --segment-text-inactive: #CBD5E1;
+
+      /* Table & Dividers */
+      --divider-color: rgba(255, 255, 255, 0.10);
+      --row-hover: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg-mesh);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      transition: background 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+    }
+
+    /* Glass Surfaces */
+    .ios-glass {
+      background: var(--glass-surface);
+      backdrop-filter: saturate(180%) blur(22px);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-border-highlight);
+      transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+
+    .ios-glass-strong {
+      background: var(--glass-surface-strong);
+      backdrop-filter: saturate(200%) blur(28px);
+      -webkit-backdrop-filter: saturate(200%) blur(28px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-border-highlight);
+    }
+
+    .ios-glass-subtle {
+      background: var(--glass-surface-subtle);
+      backdrop-filter: saturate(160%) blur(14px);
+      -webkit-backdrop-filter: saturate(160%) blur(14px);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* Adaptive Typography Helpers */
+    .ink-primary { color: var(--text-primary); }
+    .ink-secondary { color: var(--text-secondary); }
+    .ink-muted { color: var(--text-muted); }
+    .ink-price { color: var(--accent-price); }
+    .ios-divider { border-color: var(--divider-color); }
+
+    /* Adaptive Form Inputs */
+    .ios-input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--input-text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+    }
+    .ios-input::placeholder {
+      color: var(--input-placeholder);
+    }
+    .ios-input:focus {
+      outline: none;
+      border-color: #EA580C;
+      box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22);
+    }
+
+    /* iOS Segmented Control */
+    .ios-segment-track {
+      background: var(--segment-bg);
+      border: 1px solid var(--glass-border);
+    }
+    .ios-segment-active {
+      background: var(--segment-pill);
+      color: var(--segment-text-active);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    }
+    .ios-segment-inactive {
+      color: var(--segment-text-inactive);
+    }
+
+    /* Smooth iOS Spring Animations */
+    @keyframes iosSpringUp {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes iosModalPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.94) translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .animate-ios-card {
+      animation: iosSpringUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .animate-ios-modal {
+      animation: iosModalPop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .ios-tap {
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .ios-tap:active {
+      transform: scale(0.96);
+    }
+
+    .ios-card-hover:hover {
+      transform: translateY(-4px);
+    }
+
+    .admin-row:hover {
+      background-color: var(--row-hover);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+
+  <!-- TOP GLASS NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 ios-glass-strong border-b ios-divider">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3.5 gap-3">
+        <!-- Brand & Theme Switcher -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-orange-500/25 shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 11h16a1 1 0 0 1 1 1v.5a7.5 7.5 0 0 1-15 0V12a1 1 0 0 1 1-1Z" />
+                <path d="M8 21h8" />
+                <path d="M12 19.5V21" />
+                <path d="M7 11c0-2.5 2-4.5 5-4.5s5 2 5 4.5" />
+                <path d="M9 4c.5-1 1.5-1 2 0" />
+                <path d="M13 3.5c.5-1 1.5-1 2 0" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="font-display font-extrabold text-xl tracking-tight ink-primary">
+                  Bakol<span class="text-orange-600 dark:text-orange-400">Sego</span>
+                </h1>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shadow-xs">
+                  UMKM MVP
+                </span>
+              </div>
+              <p class="text-xs font-medium ink-muted">Katalog & Dashboard Kuliner Nusantara</p>
+            </div>
+          </div>
+
+          <!-- Adaptive Light / Dark Glass Mode Button (Mobile & Desktop) -->
+          <button
+            id="btn-theme-toggle"
+            type="button"
+            onclick="toggleGlassTheme()"
+            aria-label="Ganti tema tampilan cerah atau gelap"
+            class="md:hidden ios-tap ios-glass-subtle px-3 py-2 rounded-xl flex items-center gap-1.5 text-xs font-bold ink-primary"
+          >
+            <span id="theme-icon-mobile">🌙</span>
+            <span id="theme-label-mobile">Gelap</span>
+          </button>
+        </div>
+
+        <!-- Right Controls: Mode Switcher + Desktop Theme Toggle -->
+        <div class="flex items-center gap-2.5 w-full md:w-auto">
+          <div class="flex items-center ios-segment-track p-1 rounded-2xl w-full md:w-auto" role="tablist" aria-label="Mode Aplikasi">
+            <button
+              id="btn-mode-buyer"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              onclick="switchMode('buyer')"
+              class="ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-active"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              <span>Katalog Pembeli</span>
+            </button>
+            <button
+              id="btn-mode-admin"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              onclick="switchMode('admin')"
+              class="ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-inactive"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect width="7" height="9" x="3" y="3" rx="1.5"/><rect width="7" height="5" x="14" y="3" rx="1.5"/><rect width="7" height="9" x="14" y="12" rx="1.5"/><rect width="7" height="5" x="3" y="16" rx="1.5"/>
+              </svg>
+              <span>Dashboard Pengelola</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onclick="toggleGlassTheme()"
+            title="Ubah latar cerah / gelap dengan kontras teks otomatis"
+            class="hidden md:inline-flex ios-tap ios-glass-subtle px-3.5 py-2.5 rounded-2xl items-center gap-2 text-xs font-bold ink-primary shrink-0"
+          >
+            <span id="theme-icon-desktop">🌙</span>
+            <span id="theme-label-desktop">Mode Gelap</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- =====================================================================
+         VIEW 1: KATALOG PEMBELI (BUYER STOREFRONT)
+         ===================================================================== -->
+    <section id="view-buyer" class="space-y-6 animate-ios-card">
+      <!-- High-Contrast Vibrant Banner (Always crisp white text on deep warm gradient) -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600 text-white p-6 sm:p-8 shadow-xl shadow-orange-600/20 border border-white/20">
+        <div class="relative z-10 max-w-2xl space-y-2.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/25 backdrop-blur-md text-xs font-bold text-white border border-white/20">
+              <span>🌿</span>
+              <span>Dapur UMKM Lokal • Masak Segar Setiap Hari</span>
+            </div>
+            <a
+              id="buyer-hero-wa-link"
+              href="https://wa.me/6280000000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/40 hover:bg-emerald-900/60 backdrop-blur-md text-xs font-bold text-emerald-100 border border-emerald-400/30 transition-colors"
+              title="Hubungi WhatsApp Toko"
+            >
+              <svg class="w-3.5 h-3.5 fill-emerald-300 shrink-0" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+              </svg>
+              <span>WhatsApp: <strong id="buyer-hero-wa-number" class="text-white font-mono">+62 800-0000-0000</strong> ↗</span>
+            </a>
+          </div>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            Sajian Hangat Khas Nusantara Langsung ke Meja Anda
+          </h2>
+          <p class="text-sm sm:text-base text-orange-50 font-medium leading-relaxed">
+            Pilih menu favorit mulai dari nasi racikan tradisional, minuman rempah segar, hingga camilan renyah. Pesan langsung terhubung ke WhatsApp toko.
+          </p>
+        </div>
+        <svg class="hidden md:block absolute right-6 -bottom-6 w-56 h-56 text-white/15 pointer-events-none" viewBox="0 0 200 200" fill="currentColor">
+          <circle cx="100" cy="100" r="80" />
+          <circle cx="150" cy="50" r="40" />
+        </svg>
+      </div>
+
+      <!-- Filter, Search & Sorting Glass Controls -->
+      <div class="ios-glass rounded-3xl p-4 sm:p-5 space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+          <!-- Search Input -->
+          <div class="md:col-span-5 relative">
+            <label for="buyer-search" class="sr-only">Cari produk</label>
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none ink-muted">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="buyer-search"
+              placeholder="Cari sego, wedang, keripik..."
+              class="ios-input w-full pl-10 pr-9 py-2.5 text-sm font-medium rounded-2xl"
+            />
+            <button
+              id="btn-clear-search"
+              type="button"
+              onclick="clearSearch()"
+              title="Hapus pencarian"
+              class="hidden absolute inset-y-0 right-0 pr-3 flex items-center ink-muted hover:ink-primary"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Sorting Dropdown -->
+          <div class="md:col-span-4">
+            <label for="buyer-sort" class="sr-only">Urutkan produk</label>
+            <div class="relative">
+              <select
+                id="buyer-sort"
+                class="ios-input w-full pl-3.5 pr-9 py-2.5 text-sm font-semibold rounded-2xl appearance-none cursor-pointer"
+              >
+                <option value="featured">Urutkan: Unggulan Teratas</option>
+                <option value="price-asc">Harga: Termurah ke Termahal</option>
+                <option value="price-desc">Harga: Termahal ke Termurah</option>
+                <option value="stock-desc">Stok: Terbanyak Tersedia</option>
+                <option value="name-asc">Nama: A - Z</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none ink-muted">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Featured Only Toggle -->
+          <div class="md:col-span-3 flex items-center md:justify-end">
+            <label class="ios-tap ios-glass-subtle inline-flex items-center gap-2.5 cursor-pointer select-none px-4 py-2.5 rounded-2xl w-full md:w-auto justify-center">
+              <input type="checkbox" id="buyer-featured-only" class="w-4 h-4 rounded accent-orange-600 cursor-pointer" />
+              <span class="text-sm font-bold ink-primary">⭐ Hanya Unggulan</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t ios-divider">
+          <div id="category-pills" class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter Kategori">
+            <!-- Rendered dynamically -->
+          </div>
+          <p id="buyer-result-count" class="text-xs font-bold ink-muted">
+            Menampilkan 0 produk
+          </p>
+        </div>
+      </div>
+
+      <!-- Product Catalog Grid -->
+      <div id="buyer-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Product cards rendered via JS -->
+      </div>
+
+      <!-- Empty State for Buyer Catalog -->
+      <div id="buyer-empty-state" class="hidden ios-glass rounded-3xl p-10 text-center space-y-3">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-md">
+          <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-bold text-lg ink-primary">Menu Tidak Ditemukan</h3>
+        <p class="text-sm ink-secondary max-w-md mx-auto">
+          Tidak ada produk yang cocok dengan kata kunci atau filter kategori yang Anda pilih.
+        </p>
+        <button
+          type="button"
+          onclick="resetBuyerFilters()"
+          class="ios-tap inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold shadow-md"
+        >
+          Reset Semua Filter
+        </button>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         VIEW 2: DASHBOARD PENGELOLA (CRUD & STORE SUMMARY)
+         ===================================================================== -->
+    <section id="view-admin" class="hidden space-y-6 animate-ios-card">
+      <!-- Header & Action Buttons -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ios-glass p-5 rounded-3xl">
+        <div>
+          <h2 class="font-display text-xl sm:text-2xl font-extrabold ink-primary">Dashboard Pengelola Toko</h2>
+          <p class="text-sm font-medium ink-secondary mt-0.5">Kelola katalog menu, unggah foto produk, dan pantau stok harian.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onclick="confirmResetSeedData()"
+            class="ios-tap ios-glass-subtle inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl ink-primary text-sm font-bold"
+            title="Kembalikan 8 produk contoh awal ke localStorage"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+            </svg>
+            <span>Reset Data Awal</span>
+          </button>
+          <button
+            type="button"
+            onclick="openWhatsAppModal()"
+            class="ios-tap ios-glass-subtle inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl ink-primary text-sm font-bold border border-emerald-500/30 hover:border-emerald-500"
+            title="Ubah nomor WhatsApp tujuan pemesanan katalog"
+          >
+            <svg class="w-4 h-4 fill-emerald-600 dark:fill-emerald-400" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+            </svg>
+            <span>Ganti No. WhatsApp</span>
+          </button>
+          <button
+            type="button"
+            onclick="openProductModal()"
+            class="ios-tap inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md shadow-emerald-600/25"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 5v14"/><path d="M5 12h14"/>
+            </svg>
+            <span>Tambah Produk Baru</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- WhatsApp Integration Info Card -->
+      <div class="ios-glass rounded-3xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border border-emerald-500/20 bg-emerald-500/5">
+        <div class="flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/20">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-bold uppercase tracking-wider ink-muted">Nomor WhatsApp Pemesanan Toko</span>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-600/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">Tersambung ke Katalog</span>
+            </div>
+            <p id="admin-wa-display" class="font-display text-lg sm:text-xl font-extrabold ink-primary mt-0.5 tracking-tight font-mono">+62 800-0000-0000</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <button
+            type="button"
+            onclick="openWhatsAppModal()"
+            class="ios-tap inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            </svg>
+            <span>Ganti Nomor</span>
+          </button>
+          <a
+            id="admin-wa-test-link"
+            href="https://wa.me/6280000000000"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ios-tap ios-glass-subtle inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl ink-primary text-xs font-bold"
+            title="Buka WhatsApp untuk menguji coba nomor ini"
+          >
+            <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span>Uji Coba WhatsApp ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="ios-glass rounded-3xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-orange-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider ink-muted">Total Produk</p>
+            <p id="stat-total-products" class="font-display text-2xl font-extrabold ink-primary mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="ios-glass rounded-3xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider ink-muted">Total Stok Unit</p>
+            <p id="stat-total-stock" class="font-display text-2xl font-extrabold ink-primary mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="ios-glass rounded-3xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider ink-muted">Kategori Aktif</p>
+            <p id="stat-total-categories" class="font-display text-2xl font-extrabold ink-primary mt-0.5">0</p>
+          </div>
+        </div>
+
+        <div class="ios-glass rounded-3xl p-5 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider ink-muted">Produk Unggulan</p>
+            <p id="stat-featured-count" class="font-display text-2xl font-extrabold ink-primary mt-0.5">0</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Management Table Card -->
+      <div class="ios-glass rounded-3xl overflow-hidden">
+        <div class="px-5 py-4 border-b ios-divider flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <h3 class="font-display font-extrabold text-base ink-primary">Daftar Produk Tersimpan</h3>
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900" id="admin-table-badge">
+              8 item
+            </span>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input
+              type="text"
+              id="admin-search"
+              placeholder="Filter daftar di tabel..."
+              class="ios-input w-full pl-3.5 pr-8 py-2 text-xs font-medium rounded-xl"
+            />
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b ios-divider text-[11px] font-extrabold uppercase tracking-wider ink-muted">
+                <th class="py-3.5 px-4">Produk</th>
+                <th class="py-3.5 px-4">Kategori</th>
+                <th class="py-3.5 px-4">Harga</th>
+                <th class="py-3.5 px-4">Stok</th>
+                <th class="py-3.5 px-4">Status</th>
+                <th class="py-3.5 px-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="admin-product-tbody" class="divide-y ios-divider text-sm">
+              <!-- Rows rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="admin-empty-state" class="hidden p-10 text-center space-y-2">
+          <p class="font-display font-bold ink-primary">Belum ada data produk</p>
+          <p class="text-xs ink-secondary">Tambahkan produk baru atau klik "Reset Data Awal" untuk memuat 8 contoh produk UMKM.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER (REQUIRED EXACT TEXT: developed by sckco) -->
+  <footer class="ios-glass-strong border-t ios-divider mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+      <p class="text-xs font-bold tracking-wide ink-secondary">developed by sckco</p>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       MODAL 1: FORM TAMBAH / EDIT PRODUK (CRUD + IMAGE UPLOAD)
+       ===================================================================== -->
+  <div id="product-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" onclick="closeProductModal()"></div>
+
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+      <div class="animate-ios-modal relative inline-block align-bottom ios-glass-strong rounded-3xl text-left overflow-hidden shadow-2xl sm:my-8 sm:align-middle sm:max-w-xl w-full">
+        <form id="product-form" novalidate>
+          <!-- Modal Header -->
+          <div class="px-6 py-4 border-b ios-divider flex items-center justify-between">
+            <div>
+              <h3 class="font-display text-lg font-extrabold ink-primary" id="modal-title">Tambah Produk Baru</h3>
+              <p class="text-xs font-medium ink-muted">Lengkapi detail menu & gambar produk UMKM.</p>
+            </div>
+            <button type="button" onclick="closeProductModal()" class="ios-tap p-2 rounded-xl ios-glass-subtle ink-primary">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="px-6 py-5 space-y-4 max-h-[75vh] overflow-y-auto">
+            <input type="hidden" id="field-id" />
+
+            <!-- Validation Error Alert Box (High contrast red) -->
+            <div id="form-error-box" class="hidden p-3.5 rounded-2xl bg-red-600 text-white text-xs space-y-1 shadow-md">
+              <p class="font-bold flex items-center gap-1.5">
+                <span>⚠️</span> Periksa kembali isian formulir:
+              </p>
+              <ul id="form-error-list" class="list-disc list-inside space-y-0.5 pl-1 font-medium"></ul>
+            </div>
+
+            <!-- Nama Produk -->
+            <div>
+              <label for="field-nama" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">
+                Nama Produk <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="field-nama"
+                required
+                placeholder="Contoh: Sego Sambel Iwak Pe"
+                class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl"
+              />
+            </div>
+
+            <!-- Kategori & Unggulan -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="field-kategori" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">
+                  Kategori <span class="text-red-500">*</span>
+                </label>
+                <select
+                  id="field-kategori"
+                  required
+                  class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl"
+                >
+                  <option value="Makanan Berat">Makanan Berat</option>
+                  <option value="Minuman">Minuman</option>
+                  <option value="Camilan">Camilan</option>
+                </select>
+              </div>
+
+              <div class="flex items-end pb-0.5">
+                <label class="ios-tap ios-glass-subtle flex items-center gap-2.5 cursor-pointer select-none px-3.5 py-2.5 rounded-2xl w-full">
+                  <input type="checkbox" id="field-unggulan" class="w-4 h-4 rounded accent-orange-600" />
+                  <span class="text-sm font-bold ink-primary">⭐ Tandai Unggulan</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Harga & Stok -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="field-harga" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">
+                  Harga (Rp) <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="field-harga"
+                  min="0"
+                  step="500"
+                  required
+                  placeholder="15000"
+                  class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl"
+                />
+                <p class="text-[11px] font-medium ink-muted mt-1">Angka &ge; 0 (tanpa titik/koma).</p>
+              </div>
+
+              <div>
+                <label for="field-stok" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">
+                  Stok Tersedia <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="field-stok"
+                  min="0"
+                  step="1"
+                  required
+                  placeholder="20"
+                  class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl"
+                />
+                <p class="text-[11px] font-medium ink-muted mt-1">Bilangan bulat &ge; 0 (0 = Habis).</p>
+              </div>
+            </div>
+
+            <!-- Deskripsi -->
+            <div>
+              <label for="field-deskripsi" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">
+                Deskripsi Singkat <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="field-deskripsi"
+                rows="2"
+                required
+                placeholder="Jelaskan cita rasa, porsi, atau isian produk..."
+                class="ios-input w-full px-3.5 py-2 text-sm font-medium rounded-2xl"
+              ></textarea>
+            </div>
+
+            <!-- Upload Foto Produk + Kompresi Canvas + Ilustrasi Lokal -->
+            <div class="p-4 rounded-2xl ios-glass-subtle space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <label class="block text-xs font-extrabold uppercase tracking-wider ink-primary">
+                  Foto / Ilustrasi Produk
+                </label>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-600 text-white">
+                  Auto-Kompresi Lokal
+                </span>
+              </div>
+
+              <!-- Live Preview & File Upload -->
+              <div class="flex flex-col sm:flex-row items-center gap-3.5">
+                <div class="relative w-full sm:w-36 h-24 rounded-2xl overflow-hidden border ios-divider shrink-0 bg-slate-200 dark:bg-slate-800">
+                  <img id="image-live-preview" src="" alt="Pratinjau produk" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 w-full space-y-2">
+                  <label class="ios-tap cursor-pointer flex items-center justify-center gap-2 w-full py-2.5 px-3.5 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold shadow-sm">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <span>Unggah Foto (JPG / PNG / WebP)</span>
+                    <input type="file" id="field-image-file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+                  </label>
+                  <div class="flex items-center justify-between gap-2">
+                    <span id="upload-status-text" class="text-[11px] font-medium ink-muted truncate">
+                      Menggunakan ilustrasi SVG lokal
+                    </span>
+                    <button
+                      type="button"
+                      id="btn-remove-uploaded-img"
+                      onclick="clearUploadedImage()"
+                      class="hidden text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline shrink-0"
+                    >
+                      Hapus Foto
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preset SVG Lokal Selector -->
+              <div class="pt-2 border-t ios-divider space-y-2">
+                <p class="text-[11px] font-bold ink-muted">Atau pilih ilustrasi vektor lokal bebas hak cipta:</p>
+                <div class="grid grid-cols-3 gap-2" id="preset-svg-selector"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 border-t ios-divider flex items-center justify-end gap-2.5">
+            <button
+              type="button"
+              onclick="closeProductModal()"
+              class="ios-tap px-4 py-2.5 rounded-2xl text-sm font-bold ios-glass-subtle ink-primary"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="ios-tap px-5 py-2.5 rounded-2xl text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20"
+            >
+              Simpan Produk
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 2: KONFIRMASI KUSTOM (HAPUS / RESET DATA / WHATSAPP FALLBACK)
+       ===================================================================== -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen p-4 text-center">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" onclick="closeConfirmModal()"></div>
+
+      <div class="animate-ios-modal relative inline-block ios-glass-strong rounded-3xl text-left overflow-hidden shadow-2xl sm:max-w-md w-full p-6 space-y-4">
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-2xl bg-orange-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="space-y-1 flex-1">
+            <h3 id="confirm-title" class="font-display font-extrabold text-base ink-primary">Konfirmasi</h3>
+            <p id="confirm-message" class="text-sm font-medium ink-secondary leading-relaxed"></p>
+            <div id="confirm-extra-box" class="hidden mt-3"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-2">
+          <button
+            type="button"
+            id="confirm-cancel-btn"
+            onclick="closeConfirmModal()"
+            class="ios-tap px-4 py-2 rounded-2xl text-sm font-bold ios-glass-subtle ink-primary"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            id="confirm-ok-btn"
+            class="ios-tap px-4 py-2 rounded-2xl text-sm font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-sm"
+          >
+            Ya, Lanjutkan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL 3: PENGATURAN & GANTI NOMOR WHATSAPP TOKO
+       ===================================================================== -->
+  <div id="whatsapp-modal" class="hidden fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title">
+    <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity" onclick="closeWhatsAppModal()"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+      <div class="animate-ios-modal relative inline-block align-bottom ios-glass-strong rounded-3xl text-left overflow-hidden shadow-2xl sm:my-8 sm:align-middle sm:max-w-md w-full">
+        <form id="whatsapp-form" onsubmit="handleSaveWhatsApp(event)" novalidate>
+          <!-- Header -->
+          <div class="px-6 py-4 border-b ios-divider flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-display text-base sm:text-lg font-extrabold ink-primary" id="wa-modal-title">Ganti Nomor WhatsApp</h3>
+                <p class="text-xs font-medium ink-muted">Nomor tujuan pesanan UMKM BakolSego</p>
+              </div>
+            </div>
+            <button type="button" onclick="closeWhatsAppModal()" class="ios-tap p-2 rounded-xl ios-glass-subtle ink-primary">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="px-6 py-5 space-y-4">
+            <!-- Error box -->
+            <div id="wa-form-error-box" class="hidden p-3 rounded-2xl bg-red-600 text-white text-xs font-semibold">
+              <p id="wa-form-error-msg"></p>
+            </div>
+
+            <!-- Input Number -->
+            <div class="space-y-1.5">
+              <label for="field-wa-number" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary">
+                Nomor WhatsApp Toko <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="tel"
+                  id="field-wa-number"
+                  placeholder="Contoh: 081234567890 atau 6281234567890"
+                  class="ios-input w-full px-3.5 py-2.5 text-sm font-semibold rounded-2xl font-mono"
+                  required
+                  autocomplete="tel"
+                />
+              </div>
+              <p class="text-[11px] ink-muted">
+                Bisa diawali <strong>08...</strong>, <strong>628...</strong>, atau <strong>+628...</strong>. Otomatis dikonversi ke format wa.me resmi.
+              </p>
+            </div>
+
+            <!-- Live Preview Card -->
+            <div class="p-3.5 rounded-2xl ios-glass-subtle border ios-divider space-y-2">
+              <p class="text-[11px] font-bold uppercase tracking-wider ink-muted">Pratinjau Format Pesanan:</p>
+              <div class="flex items-center justify-between text-xs font-semibold">
+                <span class="ink-secondary">Tampilan Nomor:</span>
+                <span id="wa-preview-formatted" class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">+62 800-0000-0000</span>
+              </div>
+              <div class="flex items-center justify-between text-xs font-semibold">
+                <span class="ink-secondary">Tautan WhatsApp:</span>
+                <span id="wa-preview-url" class="font-mono text-[11px] ink-muted truncate max-w-[200px]">wa.me/6280000000000</span>
+              </div>
+            </div>
+
+            <!-- Quick Action: Test / Reset -->
+            <div class="flex items-center justify-between pt-1">
+              <button
+                type="button"
+                onclick="resetWhatsAppToDefault()"
+                class="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline"
+              >
+                Reset ke Default
+              </button>
+              <a
+                id="wa-modal-test-link"
+                href="https://wa.me/6280000000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                <span>Uji Nomor Ini ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="px-6 py-4 border-t ios-divider flex items-center justify-end gap-2.5">
+            <button
+              type="button"
+              onclick="closeWhatsAppModal()"
+              class="ios-tap px-4 py-2.5 rounded-2xl text-sm font-bold ios-glass-subtle ink-primary"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="ios-tap px-5 py-2.5 rounded-2xl text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20"
+            >
+              Simpan Nomor
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION (DYNAMIC ISLAND STYLE) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- =====================================================================
+       APPLICATION JAVASCRIPT (VANILLA JS)
+       ===================================================================== -->
+  <script>
+    const STORAGE_KEY = 'bakolsego_products_v1';
+    const THEME_STORAGE_KEY = 'bakolsego_glass_theme_v1';
+    const WHATSAPP_STORAGE_KEY = 'bakolsego_whatsapp_v1';
+    const WHATSAPP_DEFAULT_NUMBER = '6280000000000';
+    const CATEGORIES = ['Makanan Berat', 'Minuman', 'Camilan'];
+
+    /**
+     * WHATSAPP NUMBER HELPERS & PERSISTENCE
+     */
+    function sanitizeWhatsAppNumber(input) {
+      if (!input) return '';
+      let cleaned = String(input).trim().replace(/[^\d+]/g, '');
+      if (cleaned.startsWith('+')) {
+        cleaned = cleaned.slice(1);
+      }
+      if (cleaned.startsWith('0')) {
+        cleaned = '62' + cleaned.slice(1);
+      } else if (cleaned.startsWith('8')) {
+        cleaned = '62' + cleaned;
+      }
+      return cleaned;
+    }
+
+    function formatWhatsAppDisplay(rawNumber) {
+      const num = sanitizeWhatsAppNumber(rawNumber) || WHATSAPP_DEFAULT_NUMBER;
+      if (num.startsWith('62')) {
+        const rest = num.slice(2);
+        if (rest.length > 7) {
+          return `+62 ${rest.slice(0, 3)}-${rest.slice(3, 7)}-${rest.slice(7)}`;
+        } else if (rest.length > 3) {
+          return `+62 ${rest.slice(0, 3)}-${rest.slice(3)}`;
+        }
+        return `+62 ${rest}`;
+      }
+      return `+${num}`;
+    }
+
+    function validateWhatsAppNumber(number) {
+      if (!number || !String(number).trim()) {
+        return { valid: false, message: 'Nomor WhatsApp tidak boleh kosong.' };
+      }
+      const rawClean = String(number).trim().replace(/[\s\-\(\)\.]/g, '');
+      if (!/^\+?\d+$/.test(rawClean)) {
+        return { valid: false, message: 'Nomor WhatsApp hanya boleh berisi angka dan tanda plus (+).' };
+      }
+      const sanitized = sanitizeWhatsAppNumber(number);
+      if (!sanitized) {
+        return { valid: false, message: 'Nomor WhatsApp tidak valid.' };
+      }
+      if (sanitized.length < 10) {
+        return { valid: false, message: 'Nomor WhatsApp terlalu pendek (minimal 10 digit).' };
+      }
+      if (sanitized.length > 15) {
+        return { valid: false, message: 'Nomor WhatsApp terlalu panjang (maksimal 15 digit).' };
+      }
+      return { valid: true, sanitized };
+    }
+
+    function loadWhatsAppFromStorage() {
+      try {
+        const saved = localStorage.getItem(WHATSAPP_STORAGE_KEY);
+        if (saved && saved.trim()) {
+          const check = validateWhatsAppNumber(saved);
+          if (check.valid) return check.sanitized;
+        }
+      } catch (e) {}
+      return WHATSAPP_DEFAULT_NUMBER;
+    }
+
+    function saveWhatsAppToStorage(number) {
+      try {
+        localStorage.setItem(WHATSAPP_STORAGE_KEY, number);
+      } catch (e) {}
+    }
+
+    function updateWhatsAppUI() {
+      const current = state.whatsappNumber || WHATSAPP_DEFAULT_NUMBER;
+      const formatted = formatWhatsAppDisplay(current);
+      const waUrl = `https://wa.me/${current}`;
+
+      const buyerHeroWa = document.getElementById('buyer-hero-wa-number');
+      if (buyerHeroWa) buyerHeroWa.textContent = formatted;
+
+      const buyerHeroLink = document.getElementById('buyer-hero-wa-link');
+      if (buyerHeroLink) {
+        buyerHeroLink.href = `${waUrl}?text=${encodeURIComponent('Halo BakolSego, saya ingin bertanya tentang menu kuliner Anda.')}`;
+      }
+
+      const adminWa = document.getElementById('admin-wa-display');
+      if (adminWa) adminWa.textContent = formatted;
+
+      const adminWaTest = document.getElementById('admin-wa-test-link');
+      if (adminWaTest) {
+        adminWaTest.href = `${waUrl}?text=${encodeURIComponent('Halo BakolSego, ini pesan uji coba WhatsApp pengelola toko.')}`;
+      }
+    }
+
+    function openWhatsAppModal() {
+      const modal = document.getElementById('whatsapp-modal');
+      const input = document.getElementById('field-wa-number');
+      const errBox = document.getElementById('wa-form-error-box');
+      if (errBox) errBox.classList.add('hidden');
+
+      if (input) {
+        input.value = state.whatsappNumber || WHATSAPP_DEFAULT_NUMBER;
+        updateWhatsAppModalPreview();
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => input && input.focus(), 60);
+      }
+    }
+
+    function closeWhatsAppModal() {
+      const modal = document.getElementById('whatsapp-modal');
+      if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function updateWhatsAppModalPreview() {
+      const input = document.getElementById('field-wa-number');
+      const previewFormatted = document.getElementById('wa-preview-formatted');
+      const previewUrl = document.getElementById('wa-preview-url');
+      const testLink = document.getElementById('wa-modal-test-link');
+
+      const rawVal = input ? input.value : '';
+      const sanitized = sanitizeWhatsAppNumber(rawVal) || WHATSAPP_DEFAULT_NUMBER;
+      const formatted = formatWhatsAppDisplay(sanitized);
+
+      if (previewFormatted) previewFormatted.textContent = formatted;
+      if (previewUrl) previewUrl.textContent = `wa.me/${sanitized}`;
+      if (testLink) {
+        testLink.href = `https://wa.me/${sanitized}?text=${encodeURIComponent('Halo BakolSego, ini uji coba pesan ke nomor toko baru.')}`;
+      }
+    }
+
+    function handleSaveWhatsApp(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById('field-wa-number');
+      const errBox = document.getElementById('wa-form-error-box');
+      const errMsg = document.getElementById('wa-form-error-msg');
+
+      const val = input ? input.value : '';
+      const validation = validateWhatsAppNumber(val);
+
+      if (!validation.valid) {
+        if (errBox && errMsg) {
+          errMsg.textContent = validation.message;
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (errBox) errBox.classList.add('hidden');
+
+      state.whatsappNumber = validation.sanitized;
+      saveWhatsAppToStorage(state.whatsappNumber);
+      updateWhatsAppUI();
+      closeWhatsAppModal();
+      showToast(`Nomor WhatsApp toko berhasil diubah ke ${formatWhatsAppDisplay(state.whatsappNumber)}!`, 'success');
+    }
+
+    function resetWhatsAppToDefault() {
+      const input = document.getElementById('field-wa-number');
+      if (input) {
+        input.value = WHATSAPP_DEFAULT_NUMBER;
+        updateWhatsAppModalPreview();
+      }
+      const errBox = document.getElementById('wa-form-error-box');
+      if (errBox) errBox.classList.add('hidden');
+      showToast('Nomor diatur ulang ke default sistem (bisa langsung disimpan).', 'info');
+    }
+
+    /**
+     * ADAPTIVE LIGHT / DARK GLASS THEME CONTROLLER
+     */
+    function applyGlassTheme(theme) {
+      const normalized = theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', normalized);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, normalized);
+      } catch (e) {}
+
+      const isDark = normalized === 'dark';
+      const icon = isDark ? '☀️' : '🌙';
+      const mobileText = isDark ? 'Cerah' : 'Gelap';
+      const desktopText = isDark ? 'Mode Cerah' : 'Mode Gelap';
+
+      const mIcon = document.getElementById('theme-icon-mobile');
+      const mLabel = document.getElementById('theme-label-mobile');
+      const dIcon = document.getElementById('theme-icon-desktop');
+      const dLabel = document.getElementById('theme-label-desktop');
+
+      if (mIcon) mIcon.textContent = icon;
+      if (mLabel) mLabel.textContent = mobileText;
+      if (dIcon) dIcon.textContent = icon;
+      if (dLabel) dLabel.textContent = desktopText;
+    }
+
+    function toggleGlassTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      applyGlassTheme(next);
+      showToast(
+        next === 'dark'
+          ? 'Mode Kaca Gelap aktif (Teks terang kontras tinggi)'
+          : 'Mode Kaca Cerah aktif (Teks gelap kontras tinggi)',
+        'info'
+      );
+    }
+
+    function initGlassTheme() {
+      let saved = 'light';
+      try {
+        saved = localStorage.getItem(THEME_STORAGE_KEY) || 'light';
+      } catch (e) {}
+      applyGlassTheme(saved);
+    }
+
+    /**
+     * GENERATOR ILUSTRASI SVG LOKAL (DATA URI - BEBAS HAK CIPTA)
+     */
+    function createLocalFoodSvg(theme, label) {
+      const themes = {
+        'Makanan Berat': {
+          bg1: '#FEF3C7',
+          bg2: '#FDE68A',
+          accent: '#EA580C',
+          secondary: '#059669',
+          icon: `
+            <ellipse cx="160" cy="142" rx="68" ry="18" fill="#D97706" opacity="0.25"/>
+            <path d="M96 112h128a4 4 0 0 1 4 4v4c0 22-28 38-68 38s-68-16-68-38v-4a4 4 0 0 1 4-4z" fill="#EA580C"/>
+            <path d="M112 112c0-24 22-40 48-40s48 16 48 40H112z" fill="#FFFBEB"/>
+            <circle cx="145" cy="96" r="5" fill="#F59E0B"/>
+            <circle cx="168" cy="92" r="6" fill="#059669"/>
+            <circle cx="158" cy="103" r="4" fill="#DC2626"/>
+            <path d="M136 56c3-8 10-8 13 0M164 52c3-8 10-8 13 0" stroke="#D97706" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          `
+        },
+        'Minuman': {
+          bg1: '#ECFDF5',
+          bg2: '#D1FAE5',
+          accent: '#059669',
+          secondary: '#D97706',
+          icon: `
+            <ellipse cx="160" cy="148" rx="52" ry="14" fill="#059669" opacity="0.2"/>
+            <path d="M126 74h68l-8 70a8 8 0 0 1-8 7h-36a8 8 0 0 1-8-7l-8-70z" fill="#FFFFFF" stroke="#059669" stroke-width="4"/>
+            <path d="M130 98h60l-6 45a4 4 0 0 1-4 4h-40a4 4 0 0 1-4-4l-6-45z" fill="#F59E0B" opacity="0.85"/>
+            <path d="M172 48l-14 48" stroke="#EA580C" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="148" cy="116" r="6" fill="#FEF3C7" opacity="0.8"/>
+            <circle cx="168" cy="126" r="5" fill="#FEF3C7" opacity="0.8"/>
+          `
+        },
+        'Camilan': {
+          bg1: '#FFF7ED',
+          bg2: '#FFEDD5',
+          accent: '#D97706',
+          secondary: '#EA580C',
+          icon: `
+            <ellipse cx="160" cy="146" rx="64" ry="15" fill="#EA580C" opacity="0.2"/>
+            <path d="M104 116h112l-14 28H118l-14-28z" fill="#D97706"/>
+            <circle cx="136" cy="102" r="20" fill="#FBBF24" stroke="#B45309" stroke-width="3"/>
+            <circle cx="176" cy="98" r="22" fill="#F59E0B" stroke="#B45309" stroke-width="3"/>
+            <circle cx="156" cy="84" r="19" fill="#FDE047" stroke="#B45309" stroke-width="3"/>
+            <circle cx="152" cy="80" r="3" fill="#B45309"/>
+            <circle cx="163" cy="86" r="3" fill="#B45309"/>
+            <circle cx="174" cy="96" r="3" fill="#B45309"/>
+          `
+        }
+      };
+
+      const t = themes[theme] || themes['Makanan Berat'];
+      const safeLabel = (label || theme).replace(/[<>&"']/g, '');
+
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200">
+          <defs>
+            <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${t.bg1}"/>
+              <stop offset="100%" stop-color="${t.bg2}"/>
+            </linearGradient>
+          </defs>
+          <rect width="320" height="200" fill="url(#g)"/>
+          <circle cx="28" cy="28" r="44" fill="${t.accent}" opacity="0.08"/>
+          <circle cx="295" cy="175" r="55" fill="${t.secondary}" opacity="0.08"/>
+          ${t.icon}
+          <rect x="65" y="164" width="190" height="23" rx="11.5" fill="#0F172A" opacity="0.88"/>
+          <text x="160" y="179" font-family="sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">${safeLabel}</text>
+        </svg>
+      `.trim();
+
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    /**
+     * 8 PRODUK CONTOH UMKM KULINER NUSANTARA (NON-PRIBADI)
+     */
+    function getInitialSeedProducts() {
+      return [
+        {
+          id: 'prd-001',
+          nama: 'Sego Sambel Iwak Pe Asap',
+          kategori: 'Makanan Berat',
+          harga: 18000,
+          stok: 24,
+          deskripsi: 'Nasi pulen hangat dengan ikan pari asap gurih, sambal tomat terasi segar, lalapan kemangi, dan tahu goreng.',
+          imageUrl: createLocalFoodSvg('Makanan Berat', 'Sego Sambel Iwak Pe'),
+          unggulan: true
+        },
+        {
+          id: 'prd-002',
+          nama: 'Sego Ayam Suwir Kemangi Pedas',
+          kategori: 'Makanan Berat',
+          harga: 15000,
+          stok: 30,
+          deskripsi: 'Nasi putih daun jeruk dengan suwiran ayam bumbu kuning pedas harum daun kemangi dan serundeng kelapa.',
+          imageUrl: createLocalFoodSvg('Makanan Berat', 'Sego Ayam Kemangi'),
+          unggulan: true
+        },
+        {
+          id: 'prd-003',
+          nama: 'Sego Empal Gepuk Serundeng',
+          kategori: 'Makanan Berat',
+          harga: 24000,
+          stok: 12,
+          deskripsi: 'Daging sapi empal gepuk empuk manis gurih, taburan serundeng lengkuas, sambal bajak, dan tempe bacem.',
+          imageUrl: createLocalFoodSvg('Makanan Berat', 'Sego Empal Gepuk'),
+          unggulan: false
+        },
+        {
+          id: 'prd-004',
+          nama: 'Nasi Pecel Madiun Komplit',
+          kategori: 'Makanan Berat',
+          harga: 14000,
+          stok: 0,
+          deskripsi: 'Sayuran rebus segar disiram bumbu kacang sangrai khas Madiun, lengkap dengan rempeyek kacang renyah.',
+          imageUrl: createLocalFoodSvg('Makanan Berat', 'Nasi Pecel Madiun'),
+          unggulan: false
+        },
+        {
+          id: 'prd-005',
+          nama: 'Es Dawet Ayu Gula Aren Asli',
+          kategori: 'Minuman',
+          harga: 8000,
+          stok: 40,
+          deskripsi: 'Cendol pandan alami berpadu santan gurih segar dan sirup gula aren organik wangi nangka.',
+          imageUrl: createLocalFoodSvg('Minuman', 'Es Dawet Ayu Aren'),
+          unggulan: true
+        },
+        {
+          id: 'prd-006',
+          nama: 'Wedang Uwuh Rempah Komplit',
+          kategori: 'Minuman',
+          harga: 10000,
+          stok: 18,
+          deskripsi: 'Minuman tradisional hangat racikan jahe emprit bakar, kayu secang, cengkeh, kayu manis, dan gula batu.',
+          imageUrl: createLocalFoodSvg('Minuman', 'Wedang Uwuh Rempah'),
+          unggulan: false
+        },
+        {
+          id: 'prd-007',
+          nama: 'Keripik Tempe Sagu Renyah (200g)',
+          kategori: 'Camilan',
+          harga: 12000,
+          stok: 35,
+          deskripsi: 'Keripik tempe kedelai pilihan berbalut tepung sagu berbumbu bawang putih ketumbar, tipis dan ekstra renyah.',
+          imageUrl: createLocalFoodSvg('Camilan', 'Keripik Tempe Sagu'),
+          unggulan: true
+        },
+        {
+          id: 'prd-008',
+          nama: 'Pisang Sale Gulung Crispy',
+          kategori: 'Camilan',
+          harga: 13500,
+          stok: 15,
+          deskripsi: 'Pisang raja manis alami yang diasap lalu digulung kulit lumpia renyah dengan sentuhan wijen panggang.',
+          imageUrl: createLocalFoodSvg('Camilan', 'Pisang Sale Crispy'),
+          unggulan: false
+        }
+      ];
+    }
+
+    /**
+     * STATE APLIKASI
+     */
+    let state = {
+      mode: 'buyer',
+      products: [],
+      whatsappNumber: loadWhatsAppFromStorage(),
+      filters: {
+        search: '',
+        category: 'Semua',
+        featuredOnly: false,
+        sortBy: 'featured'
+      },
+      adminSearch: '',
+      selectedSvgPreset: 'Makanan Berat',
+      uploadedImageDataUrl: ''
+    };
+
+    const rupiahsFormatter = new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+
+    function formatRupiah(amount) {
+      return rupiahsFormatter.format(Number(amount) || 0);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /**
+     * LOCALSTORAGE PERSISTENCE
+     */
+    function loadProductsFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          const seeded = getInitialSeedProducts();
+          saveProductsToStorage(seeded);
+          return seeded;
+        }
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) throw new Error('Data korup');
+        return parsed;
+      } catch (err) {
+        const seeded = getInitialSeedProducts();
+        saveProductsToStorage(seeded);
+        return seeded;
+      }
+    }
+
+    function saveProductsToStorage(products) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      } catch (err) {
+        showToast('Kapasitas penyimpanan lokal penuh. Gunakan gambar lebih kecil.', 'error');
+      }
+    }
+
+    /**
+     * MODE SWITCHER (BUYER vs ADMIN)
+     */
+    function switchMode(newMode) {
+      state.mode = newMode;
+      const buyerView = document.getElementById('view-buyer');
+      const adminView = document.getElementById('view-admin');
+      const btnBuyer = document.getElementById('btn-mode-buyer');
+      const btnAdmin = document.getElementById('btn-mode-admin');
+
+      if (newMode === 'buyer') {
+        buyerView.classList.remove('hidden');
+        adminView.classList.add('hidden');
+
+        btnBuyer.className = 'ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-active';
+        btnBuyer.setAttribute('aria-selected', 'true');
+
+        btnAdmin.className = 'ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-inactive';
+        btnAdmin.setAttribute('aria-selected', 'false');
+
+        renderBuyerCatalog();
+      } else {
+        buyerView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+
+        btnAdmin.className = 'ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-active';
+        btnAdmin.setAttribute('aria-selected', 'true');
+
+        btnBuyer.className = 'ios-tap flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 ios-segment-inactive';
+        btnBuyer.setAttribute('aria-selected', 'false');
+
+        renderAdminDashboard();
+      }
+    }
+
+    /**
+     * RENDER KATALOG PEMBELI (HIGH CONTRAST BADGES & CARDS)
+     */
+    function renderCategoryPills() {
+      const container = document.getElementById('category-pills');
+      const allCats = ['Semua', ...CATEGORIES];
+
+      container.innerHTML = allCats.map(cat => {
+        const isActive = state.filters.category === cat;
+        const count = cat === 'Semua'
+          ? state.products.length
+          : state.products.filter(p => p.kategori === cat).length;
+
+        // High contrast pill rules: solid dark/orange pill with white text when active; frosted surface with adaptive ink when inactive
+        const activeClasses = 'bg-orange-600 text-white border-orange-600 shadow-sm';
+        const inactiveClasses = 'ios-glass-subtle ink-primary hover:border-orange-500';
+
+        return `
+          <button
+            type="button"
+            onclick="setCategoryFilter('${escapeHtml(cat)}')"
+            class="ios-tap px-3.5 py-1.5 rounded-full text-xs font-bold border transition flex items-center gap-1.5 ${isActive ? activeClasses : inactiveClasses}"
+          >
+            <span>${escapeHtml(cat)}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded-full ${isActive ? 'bg-black/25 text-white' : 'bg-slate-900/10 dark:bg-white/15 ink-primary'}">${count}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function getFilteredAndSortedProducts() {
+      const query = state.filters.search.trim().toLowerCase();
+
+      let filtered = state.products.filter(product => {
+        if (state.filters.category !== 'Semua' && product.kategori !== state.filters.category) {
+          return false;
+        }
+        if (state.filters.featuredOnly && !product.unggulan) {
+          return false;
+        }
+        if (query) {
+          const matchName = product.nama.toLowerCase().includes(query);
+          const matchDesc = product.deskripsi.toLowerCase().includes(query);
+          if (!matchName && !matchDesc) return false;
+        }
+        return true;
+      });
+
+      const sortBy = state.filters.sortBy;
+      filtered.sort((a, b) => {
+        if (sortBy === 'featured') {
+          if (a.unggulan !== b.unggulan) return a.unggulan ? -1 : 1;
+          return a.nama.localeCompare(b.nama, 'id');
+        }
+        if (sortBy === 'price-asc') return a.harga - b.harga;
+        if (sortBy === 'price-desc') return b.harga - a.harga;
+        if (sortBy === 'stock-desc') return b.stok - a.stok;
+        if (sortBy === 'name-asc') return a.nama.localeCompare(b.nama, 'id');
+        return 0;
+      });
+
+      return filtered;
+    }
+
+    function renderBuyerCatalog() {
+      renderCategoryPills();
+
+      const grid = document.getElementById('buyer-product-grid');
+      const emptyState = document.getElementById('buyer-empty-state');
+      const countLabel = document.getElementById('buyer-result-count');
+
+      const items = getFilteredAndSortedProducts();
+      countLabel.textContent = `Menampilkan ${items.length} dari ${state.products.length} produk`;
+
+      if (items.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.classList.remove('hidden');
+
+      grid.innerHTML = items.map((product, index) => {
+        const isOutOfStock = Number(product.stok) <= 0;
+        const isLowStock = !isOutOfStock && Number(product.stok) <= 5;
+        const fallbackSvg = createLocalFoodSvg(product.kategori, product.nama);
+        const imgSrc = product.imageUrl || fallbackSvg;
+
+        // Solid high-contrast category badge (Dark text on bright amber/yellow, white text on deep emerald/orange)
+        let catBadgeClass = 'bg-slate-900/85 text-white border-white/20';
+        if (product.kategori === 'Minuman') catBadgeClass = 'bg-emerald-700/90 text-white border-white/20';
+        if (product.kategori === 'Camilan') catBadgeClass = 'bg-orange-700/90 text-white border-white/20';
+
+        // High-contrast stock badge
+        let stockBadge = `<span class="inline-flex items-center text-xs font-bold text-white bg-emerald-600 px-2.5 py-0.5 rounded-lg shadow-2xs">Stok: ${product.stok}</span>`;
+        if (isOutOfStock) {
+          stockBadge = `<span class="inline-flex items-center text-xs font-bold text-white bg-red-600 px-2.5 py-0.5 rounded-lg shadow-2xs">Stok Habis</span>`;
+        } else if (isLowStock) {
+          stockBadge = `<span class="inline-flex items-center text-xs font-extrabold text-slate-950 bg-amber-400 px-2.5 py-0.5 rounded-lg shadow-2xs">Sisa ${product.stok}</span>`;
+        }
+
+        const animDelay = Math.min(index * 45, 360);
+
+        return `
+          <article
+            style="animation-delay: ${animDelay}ms;"
+            class="animate-ios-card ios-glass ios-card-hover group rounded-3xl flex flex-col overflow-hidden ${isOutOfStock ? 'opacity-85' : ''}"
+          >
+            <!-- Product Image -->
+            <div class="relative aspect-[16/10] bg-slate-200 dark:bg-slate-800 overflow-hidden border-b ios-divider">
+              <img
+                src="${escapeHtml(imgSrc)}"
+                alt="${escapeHtml(product.nama)}"
+                onerror="this.onerror=null;this.src='${fallbackSvg}';"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'grayscale-[50%]' : ''}"
+              />
+              <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-1.5 pointer-events-none">
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border backdrop-blur-md shadow-xs ${catBadgeClass}">
+                  ${escapeHtml(product.kategori)}
+                </span>
+                ${product.unggulan ? `
+                  <span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 border border-amber-500 shadow-xs flex items-center gap-1">
+                    <span>⭐</span> Unggulan
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+              <div class="space-y-1.5">
+                <h3 class="font-display font-extrabold text-base ink-primary leading-snug">
+                  ${escapeHtml(product.nama)}
+                </h3>
+                <p class="text-xs font-medium ink-secondary leading-relaxed line-clamp-2" title="${escapeHtml(product.deskripsi)}">
+                  ${escapeHtml(product.deskripsi)}
+                </p>
+              </div>
+
+              <div class="space-y-3 pt-2.5 border-t ios-divider">
+                <div class="flex items-center justify-between gap-2">
+                  <div>
+                    <span class="block text-[10px] font-extrabold uppercase tracking-wider ink-muted">Harga</span>
+                    <span class="font-display font-extrabold text-lg ink-price">${formatRupiah(product.harga)}</span>
+                  </div>
+                  ${stockBadge}
+                </div>
+
+                ${isOutOfStock ? `
+                  <button
+                    type="button"
+                    disabled
+                    class="w-full py-2.5 px-4 rounded-2xl bg-slate-300 text-slate-700 dark:bg-slate-700 dark:text-slate-300 text-xs font-extrabold cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    <span>Stok Sementara Habis</span>
+                  </button>
+                ` : `
+                  <button
+                    type="button"
+                    onclick="orderViaWhatsApp('${escapeHtml(product.id)}')"
+                    class="ios-tap w-full py-2.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+                    </svg>
+                    <span>Pesan via WhatsApp</span>
+                  </button>
+                `}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    /**
+     * WHATSAPP ORDER HANDLER
+     */
+    function orderViaWhatsApp(productId) {
+      const product = state.products.find(p => p.id === productId);
+      if (!product) return;
+
+      const message = `Halo BakolSego, saya ingin memesan:\n• Produk: *${product.nama}*\n• Kategori: ${product.kategori}\n• Harga Satuan: ${formatRupiah(product.harga)}\n• Jumlah: 1 porsi\n\nApakah stok masih tersedia? Terima kasih.`;
+      const encodedText = encodeURIComponent(message);
+      const activeWa = state.whatsappNumber || WHATSAPP_DEFAULT_NUMBER;
+      const waUrl = `https://wa.me/${activeWa}?text=${encodedText}`;
+
+      const popup = window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+      if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+        openConfirmModal({
+          title: 'Pratinjau Pesan WhatsApp',
+          message: 'Salin format pesanan di bawah ini atau buka tautan WhatsApp secara manual:',
+          okText: 'Salin Pesan',
+          cancelText: 'Tutup',
+          extraHtml: `
+            <div class="space-y-2 text-left">
+              <textarea id="wa-fallback-text" readonly rows="4" class="ios-input w-full p-2.5 text-xs rounded-xl font-mono">${escapeHtml(message)}</textarea>
+              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 hover:underline">
+                <span>Buka Tautan wa.me/${activeWa} (${formatWhatsAppDisplay(activeWa)}) ↗</span>
+              </a>
+            </div>
+          `,
+          onConfirm: () => {
+            const textarea = document.getElementById('wa-fallback-text');
+            if (textarea) {
+              textarea.select();
+              document.execCommand('copy');
+              showToast('Format pesanan berhasil disalin!', 'success');
+            }
+          }
+        });
+      } else {
+        showToast(`Membuka WhatsApp (${formatWhatsAppDisplay(activeWa)}) untuk "${product.nama}"...`, 'success');
+      }
+    }
+
+    function setCategoryFilter(category) {
+      state.filters.category = category;
+      renderBuyerCatalog();
+    }
+
+    function clearSearch() {
+      state.filters.search = '';
+      document.getElementById('buyer-search').value = '';
+      document.getElementById('btn-clear-search').classList.add('hidden');
+      renderBuyerCatalog();
+    }
+
+    function resetBuyerFilters() {
+      state.filters = {
+        search: '',
+        category: 'Semua',
+        featuredOnly: false,
+        sortBy: 'featured'
+      };
+      document.getElementById('buyer-search').value = '';
+      document.getElementById('btn-clear-search').classList.add('hidden');
+      document.getElementById('buyer-sort').value = 'featured';
+      document.getElementById('buyer-featured-only').checked = false;
+      renderBuyerCatalog();
+    }
+
+    /**
+     * RENDER DASHBOARD PENGELOLA
+     */
+    function renderAdminDashboard() {
+      updateWhatsAppUI();
+      const totalProducts = state.products.length;
+      const totalStock = state.products.reduce((sum, item) => sum + (Number(item.stok) || 0), 0);
+      const activeCategories = new Set(state.products.map(p => p.kategori)).size;
+      const featuredCount = state.products.filter(p => p.unggulan).length;
+
+      document.getElementById('stat-total-products').textContent = totalProducts;
+      document.getElementById('stat-total-stock').textContent = totalStock.toLocaleString('id-ID');
+      document.getElementById('stat-total-categories').textContent = `${activeCategories} / ${CATEGORIES.length}`;
+      document.getElementById('stat-featured-count').textContent = featuredCount;
+
+      const tbody = document.getElementById('admin-product-tbody');
+      const emptyState = document.getElementById('admin-empty-state');
+      const tableBadge = document.getElementById('admin-table-badge');
+
+      const query = state.adminSearch.trim().toLowerCase();
+      const filteredList = query
+        ? state.products.filter(p =>
+            p.nama.toLowerCase().includes(query) ||
+            p.kategori.toLowerCase().includes(query)
+          )
+        : state.products;
+
+      tableBadge.textContent = `${filteredList.length} item`;
+
+      if (filteredList.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      tbody.innerHTML = filteredList.map(product => {
+        const fallbackSvg = createLocalFoodSvg(product.kategori, product.nama);
+        const imgSrc = product.imageUrl || fallbackSvg;
+        const isOut = Number(product.stok) === 0;
+
+        return `
+          <tr class="admin-row transition-colors">
+            <td class="py-3.5 px-4">
+              <div class="flex items-center gap-3">
+                <img
+                  src="${escapeHtml(imgSrc)}"
+                  alt="${escapeHtml(product.nama)}"
+                  onerror="this.onerror=null;this.src='${fallbackSvg}';"
+                  class="w-12 h-9 rounded-xl object-cover border ios-divider shrink-0 bg-slate-200 dark:bg-slate-800"
+                />
+                <div class="min-w-0">
+                  <p class="font-extrabold ink-primary truncate max-w-[200px] sm:max-w-xs">${escapeHtml(product.nama)}</p>
+                  <p class="text-xs font-medium ink-muted truncate max-w-[200px] sm:max-w-xs">${escapeHtml(product.deskripsi)}</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full ios-glass-subtle ink-primary">
+                ${escapeHtml(product.kategori)}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap font-extrabold ink-price">
+              ${formatRupiah(product.harga)}
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-lg ${isOut ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'}">
+                ${product.stok} unit
+              </span>
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              ${product.unggulan
+                ? `<span class="inline-flex items-center gap-1 text-xs font-extrabold text-slate-950 bg-amber-400 px-2.5 py-1 rounded-full">⭐ Unggulan</span>`
+                : `<span class="text-xs font-semibold ink-muted">Reguler</span>`
+              }
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onclick="openProductModal('${escapeHtml(product.id)}')"
+                  class="ios-tap px-3 py-1.5 rounded-xl text-xs font-extrabold bg-amber-400 hover:bg-amber-500 text-slate-950 shadow-2xs"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onclick="confirmDeleteProduct('${escapeHtml(product.id)}')"
+                  class="ios-tap px-3 py-1.5 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-700 text-white shadow-2xs"
+                >
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /**
+     * IMAGE UPLOAD & HTML5 CANVAS COMPRESSION (LOCALSTORAGE FRIENDLY)
+     */
+    function compressUploadedImage(file) {
+      return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith('image/')) {
+          reject(new Error('File bukan gambar yang valid.'));
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            const maxWidth = 640;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            resolve(compressedDataUrl);
+          };
+          img.onerror = () => reject(new Error('Gagal memproses gambar.'));
+          img.src = event.target.result;
+        };
+        reader.onerror = () => reject(new Error('Gagal membaca file gambar.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function updateImageModalPreview() {
+      const previewImg = document.getElementById('image-live-preview');
+      const statusText = document.getElementById('upload-status-text');
+      const removeBtn = document.getElementById('btn-remove-uploaded-img');
+      const namaVal = document.getElementById('field-nama').value.trim() || state.selectedSvgPreset;
+
+      if (state.uploadedImageDataUrl) {
+        previewImg.src = state.uploadedImageDataUrl;
+        statusText.textContent = 'Foto produk terunggah (terkompresi)';
+        removeBtn.classList.remove('hidden');
+      } else {
+        previewImg.src = createLocalFoodSvg(state.selectedSvgPreset, namaVal);
+        statusText.textContent = `Ilustrasi SVG lokal: ${state.selectedSvgPreset}`;
+        removeBtn.classList.add('hidden');
+      }
+    }
+
+    function clearUploadedImage() {
+      state.uploadedImageDataUrl = '';
+      document.getElementById('field-image-file').value = '';
+      updateImageModalPreview();
+    }
+
+    /**
+     * CRUD MODAL & VALIDATION
+     */
+    function renderPresetSvgSelector() {
+      const container = document.getElementById('preset-svg-selector');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const previewSrc = createLocalFoodSvg(cat, cat);
+        const isSelected = !state.uploadedImageDataUrl && state.selectedSvgPreset === cat;
+        return `
+          <button
+            type="button"
+            onclick="selectSvgPreset('${cat}')"
+            class="ios-tap p-1.5 rounded-2xl border text-left transition flex flex-col items-center gap-1 ${isSelected ? 'border-emerald-600 bg-emerald-600 text-white shadow-sm' : 'ios-glass-subtle ink-primary'}"
+          >
+            <img src="${previewSrc}" alt="${cat}" class="w-full h-11 object-cover rounded-xl" />
+            <span class="text-[11px] font-bold">${cat}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectSvgPreset(category) {
+      state.uploadedImageDataUrl = '';
+      document.getElementById('field-image-file').value = '';
+      state.selectedSvgPreset = category;
+      renderPresetSvgSelector();
+      updateImageModalPreview();
+    }
+
+    function openProductModal(productId = null) {
+      const modal = document.getElementById('product-modal');
+      const title = document.getElementById('modal-title');
+      const errorBox = document.getElementById('form-error-box');
+
+      errorBox.classList.add('hidden');
+      document.getElementById('field-image-file').value = '';
+
+      if (productId) {
+        const product = state.products.find(p => p.id === productId);
+        if (!product) return;
+
+        title.textContent = 'Edit Produk';
+        document.getElementById('field-id').value = product.id;
+        document.getElementById('field-nama').value = product.nama;
+        document.getElementById('field-kategori').value = product.kategori;
+        document.getElementById('field-harga').value = product.harga;
+        document.getElementById('field-stok').value = product.stok;
+        document.getElementById('field-deskripsi').value = product.deskripsi;
+        document.getElementById('field-unggulan').checked = Boolean(product.unggulan);
+
+        state.selectedSvgPreset = product.kategori;
+        const isSvgDataUri = String(product.imageUrl || '').startsWith('data:image/svg+xml');
+        state.uploadedImageDataUrl = isSvgDataUri ? '' : (product.imageUrl || '');
+      } else {
+        title.textContent = 'Tambah Produk Baru';
+        document.getElementById('product-form').reset();
+        document.getElementById('field-id').value = '';
+        document.getElementById('field-kategori').value = 'Makanan Berat';
+        state.selectedSvgPreset = 'Makanan Berat';
+        state.uploadedImageDataUrl = '';
+      }
+
+      renderPresetSvgSelector();
+      updateImageModalPreview();
+      modal.classList.remove('hidden');
+      document.getElementById('field-nama').focus();
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    function validateProductInput(data) {
+      const errors = [];
+      if (!data.nama || data.nama.trim().length < 2) {
+        errors.push('Nama produk wajib diisi (minimal 2 karakter).');
+      }
+      if (!CATEGORIES.includes(data.kategori)) {
+        errors.push('Kategori produk harus dipilih dari daftar yang tersedia.');
+      }
+      if (data.harga === '' || isNaN(Number(data.harga)) || Number(data.harga) < 0) {
+        errors.push('Harga harus berupa angka valid bernilai >= 0.');
+      }
+      const parsedStok = Number(data.stok);
+      if (data.stok === '' || isNaN(parsedStok) || !Number.isInteger(parsedStok) || parsedStok < 0) {
+        errors.push('Stok harus berupa bilangan bulat (integer) bernilai >= 0.');
+      }
+      if (!data.deskripsi || data.deskripsi.trim().length < 5) {
+        errors.push('Deskripsi singkat wajib diisi (minimal 5 karakter).');
+      }
+      return errors;
+    }
+
+    document.getElementById('product-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const id = document.getElementById('field-id').value.trim();
+      const nama = document.getElementById('field-nama').value.trim();
+      const kategori = document.getElementById('field-kategori').value;
+      const hargaRaw = document.getElementById('field-harga').value.trim();
+      const stokRaw = document.getElementById('field-stok').value.trim();
+      const deskripsi = document.getElementById('field-deskripsi').value.trim();
+      const unggulan = document.getElementById('field-unggulan').checked;
+
+      const errors = validateProductInput({
+        nama,
+        kategori,
+        harga: hargaRaw,
+        stok: stokRaw,
+        deskripsi
+      });
+
+      const errorBox = document.getElementById('form-error-box');
+      const errorList = document.getElementById('form-error-list');
+
+      if (errors.length > 0) {
+        errorList.innerHTML = errors.map(err => `<li>${escapeHtml(err)}</li>`).join('');
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      errorBox.classList.add('hidden');
+
+      const finalImageUrl = state.uploadedImageDataUrl
+        ? state.uploadedImageDataUrl
+        : createLocalFoodSvg(state.selectedSvgPreset || kategori, nama);
+
+      const productPayload = {
+        id: id || 'prd-' + Date.now(),
+        nama,
+        kategori,
+        harga: Number(hargaRaw),
+        stok: parseInt(stokRaw, 10),
+        deskripsi,
+        imageUrl: finalImageUrl,
+        unggulan
+      };
+
+      if (id) {
+        const idx = state.products.findIndex(p => p.id === id);
+        if (idx !== -1) {
+          state.products[idx] = productPayload;
+          showToast(`Produk "${nama}" berhasil diperbarui.`, 'success');
+        }
+      } else {
+        state.products.unshift(productPayload);
+        showToast(`Produk "${nama}" berhasil ditambahkan.`, 'success');
+      }
+
+      saveProductsToStorage(state.products);
+      closeProductModal();
+      renderAdminDashboard();
+    });
+
+    /**
+     * CONFIRMATION MODAL (DELETE / RESET)
+     */
+    let activeConfirmCallback = null;
+
+    function openConfirmModal({ title, message, okText = 'Ya, Lanjutkan', cancelText = 'Batal', extraHtml = '', onConfirm }) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-message').textContent = message;
+      document.getElementById('confirm-ok-btn').textContent = okText;
+      document.getElementById('confirm-cancel-btn').textContent = cancelText;
+
+      const extraBox = document.getElementById('confirm-extra-box');
+      if (extraHtml) {
+        extraBox.innerHTML = extraHtml;
+        extraBox.classList.remove('hidden');
+      } else {
+        extraBox.innerHTML = '';
+        extraBox.classList.add('hidden');
+      }
+
+      activeConfirmCallback = onConfirm;
+      document.getElementById('confirm-modal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      activeConfirmCallback = null;
+    }
+
+    document.getElementById('confirm-ok-btn').addEventListener('click', function () {
+      if (typeof activeConfirmCallback === 'function') {
+        activeConfirmCallback();
+      }
+      closeConfirmModal();
+    });
+
+    function confirmDeleteProduct(productId) {
+      const product = state.products.find(p => p.id === productId);
+      if (!product) return;
+
+      openConfirmModal({
+        title: 'Hapus Produk?',
+        message: `Apakah Anda yakin ingin menghapus "${product.nama}" dari katalog?`,
+        okText: 'Ya, Hapus',
+        onConfirm: () => {
+          state.products = state.products.filter(p => p.id !== productId);
+          saveProductsToStorage(state.products);
+          renderAdminDashboard();
+          showToast(`Produk "${product.nama}" telah dihapus.`, 'info');
+        }
+      });
+    }
+
+    function confirmResetSeedData() {
+      openConfirmModal({
+        title: 'Reset ke 8 Data Awal?',
+        message: 'Semua perubahan produk saat ini di localStorage akan diganti kembali dengan 8 contoh produk UMKM BakolSego.',
+        okText: 'Ya, Reset Data',
+        onConfirm: () => {
+          state.products = getInitialSeedProducts();
+          saveProductsToStorage(state.products);
+          renderAdminDashboard();
+          showToast('Data dikembalikan ke 8 produk contoh awal.', 'success');
+        }
+      });
+    }
+
+    /**
+     * TOAST NOTIFICATION
+     */
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      let styleClass = 'bg-slate-900 text-white border-white/15';
+      let icon = '✅';
+      if (type === 'error') {
+        styleClass = 'bg-red-600 text-white border-red-400/40';
+        icon = '⚠️';
+      } else if (type === 'info') {
+        styleClass = 'bg-slate-900 text-white border-amber-400/40';
+        icon = '✨';
+      }
+
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl border shadow-xl text-xs font-bold transition-all duration-300 transform translate-y-3 opacity-0 ${styleClass}`;
+      toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`;
+
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-3');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    /**
+     * INIT APP & EVENT LISTENERS
+     */
+    function initApp() {
+      initGlassTheme();
+      state.whatsappNumber = loadWhatsAppFromStorage();
+      updateWhatsAppUI();
+      state.products = loadProductsFromStorage();
+
+      const buyerSearchInput = document.getElementById('buyer-search');
+      const clearSearchBtn = document.getElementById('btn-clear-search');
+      buyerSearchInput.addEventListener('input', (e) => {
+        state.filters.search = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', state.filters.search.length === 0);
+        renderBuyerCatalog();
+      });
+
+      document.getElementById('buyer-sort').addEventListener('change', (e) => {
+        state.filters.sortBy = e.target.value;
+        renderBuyerCatalog();
+      });
+
+      document.getElementById('buyer-featured-only').addEventListener('change', (e) => {
+        state.filters.featuredOnly = e.target.checked;
+        renderBuyerCatalog();
+      });
+
+      document.getElementById('admin-search').addEventListener('input', (e) => {
+        state.adminSearch = e.target.value;
+        renderAdminDashboard();
+      });
+
+      const waInput = document.getElementById('field-wa-number');
+      if (waInput) {
+        waInput.addEventListener('input', () => {
+          updateWhatsAppModalPreview();
+          const errBox = document.getElementById('wa-form-error-box');
+          if (errBox) errBox.classList.add('hidden');
+        });
+      }
+
+      document.getElementById('field-kategori').addEventListener('change', (e) => {
+        if (!state.uploadedImageDataUrl) {
+          state.selectedSvgPreset = e.target.value;
+          renderPresetSvgSelector();
+          updateImageModalPreview();
+        }
+      });
+
+      document.getElementById('field-nama').addEventListener('input', () => {
+        if (!state.uploadedImageDataUrl) {
+          updateImageModalPreview();
+        }
+      });
+
+      document.getElementById('field-image-file').addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        try {
+          const compressed = await compressUploadedImage(file);
+          state.uploadedImageDataUrl = compressed;
+          renderPresetSvgSelector();
+          updateImageModalPreview();
+          showToast('Foto berhasil diunggah & dikompresi!', 'success');
+        } catch (err) {
+          showToast(err.message || 'Gagal mengunggah gambar.', 'error');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeProductModal();
+          closeConfirmModal();
+          closeWhatsAppModal();
+        }
+      });
+
+      renderBuyerCatalog();
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

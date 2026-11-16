@@ -1,0 +1,15 @@
+{
+  "name": "bakolsego",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "BakolSego — katalog & dashboard UMKM kuliner dengan peran admin, seller, dan pembeli.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  }
+}

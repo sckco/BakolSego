@@ -1,0 +1,379 @@
+    :root,
+    [data-theme="light"] {
+      --bg-mesh: radial-gradient(circle at 12% 15%, rgba(255, 224, 178, 0.72) 0%, transparent 45%),
+                 radial-gradient(circle at 88% 12%, rgba(186, 230, 253, 0.65) 0%, transparent 45%),
+                 radial-gradient(circle at 75% 85%, rgba(167, 243, 208, 0.58) 0%, transparent 50%),
+                 linear-gradient(135deg, #F8FAFC 0%, #FFFBEB 50%, #F1F5F9 100%);
+      --glass-surface: rgba(255, 255, 255, 0.78);
+      --glass-surface-strong: rgba(255, 255, 255, 0.90);
+      --glass-surface-subtle: rgba(248, 250, 252, 0.75);
+      --glass-border: rgba(15, 23, 42, 0.10);
+      --glass-border-highlight: rgba(255, 255, 255, 0.85);
+      --glass-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --accent-price: #C2410C;
+      --input-bg: rgba(255, 255, 255, 0.92);
+      --input-border: rgba(15, 23, 42, 0.16);
+      --input-text: #0F172A;
+      --input-placeholder: #64748B;
+      --segment-bg: rgba(15, 23, 42, 0.07);
+      --segment-pill: #FFFFFF;
+      --segment-text-active: #0F172A;
+      --segment-text-inactive: #334155;
+      --divider-color: rgba(15, 23, 42, 0.09);
+      --row-hover: rgba(251, 191, 36, 0.14);
+    }
+
+    [data-theme="dark"] {
+      --bg-mesh: radial-gradient(circle at 15% 15%, rgba(234, 88, 12, 0.24) 0%, transparent 45%),
+                 radial-gradient(circle at 85% 18%, rgba(16, 185, 129, 0.20) 0%, transparent 45%),
+                 radial-gradient(circle at 50% 90%, rgba(56, 189, 248, 0.18) 0%, transparent 50%),
+                 linear-gradient(135deg, #090D16 0%, #0F172A 55%, #111827 100%);
+      --glass-surface: rgba(30, 41, 59, 0.72);
+      --glass-surface-strong: rgba(15, 23, 42, 0.88);
+      --glass-surface-subtle: rgba(30, 41, 59, 0.52);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-border-highlight: rgba(255, 255, 255, 0.18);
+      --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), 0 2px 8px -1px rgba(0, 0, 0, 0.35);
+      --text-primary: #F8FAFC;
+      --text-secondary: #E2E8F0;
+      --text-muted: #CBD5E1;
+      --accent-price: #FDBA74;
+      --input-bg: rgba(15, 23, 42, 0.82);
+      --input-border: rgba(255, 255, 255, 0.18);
+      --input-text: #F8FAFC;
+      --input-placeholder: #94A3B8;
+      --segment-bg: rgba(255, 255, 255, 0.10);
+      --segment-pill: rgba(51, 65, 85, 0.95);
+      --segment-text-active: #FFFFFF;
+      --segment-text-inactive: #CBD5E1;
+      --divider-color: rgba(255, 255, 255, 0.10);
+      --row-hover: rgba(255, 255, 255, 0.06);
+    }
+
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      background: var(--bg-mesh);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      transition: background 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+    }
+
+    .ios-glass {
+      background: var(--glass-surface);
+      backdrop-filter: saturate(180%) blur(22px);
+      -webkit-backdrop-filter: saturate(180%) blur(22px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-border-highlight);
+    }
+    .ios-glass-strong {
+      background: var(--glass-surface-strong);
+      backdrop-filter: saturate(200%) blur(28px);
+      -webkit-backdrop-filter: saturate(200%) blur(28px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-border-highlight);
+    }
+    .ios-glass-subtle {
+      background: var(--glass-surface-subtle);
+      backdrop-filter: saturate(160%) blur(14px);
+      -webkit-backdrop-filter: saturate(160%) blur(14px);
+      border: 1px solid var(--glass-border);
+    }
+    .ink-primary { color: var(--text-primary); }
+    .ink-secondary { color: var(--text-secondary); }
+    .ink-muted { color: var(--text-muted); }
+    .ink-price { color: var(--accent-price); }
+    .ios-divider { border-color: var(--divider-color); }
+
+    .ios-input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--input-text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+    }
+    .ios-input::placeholder { color: var(--input-placeholder); }
+    .ios-input:focus {
+      outline: none;
+      border-color: #EA580C;
+      box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.22);
+    }
+
+    .ios-segment-track { background: var(--segment-bg); border: 1px solid var(--glass-border); }
+    .ios-segment-active {
+      background: var(--segment-pill);
+      color: var(--segment-text-active);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    }
+    .ios-segment-inactive { color: var(--segment-text-inactive); }
+
+    @keyframes iosSpringUp {
+      0% { opacity: 0; transform: translateY(14px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes iosModalPop {
+      0% { opacity: 0; transform: scale(0.94) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-ios-card { animation: iosSpringUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .animate-ios-modal { animation: iosModalPop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .ios-tap { transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, box-shadow 0.2s ease; }
+    .ios-tap:active { transform: scale(0.96); }
+    .ios-card-hover:hover { transform: translateY(-4px); }
+    .admin-row:hover { background-color: var(--row-hover); }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    [hidden] { display: none !important; }
+
+    /* ================================================================
+       LAPISAN VISUAL v2 — aurora, glass halus, aksen gradient
+       ================================================================ */
+    :root {
+      --brand-1: #FB923C;
+      --brand-2: #EA580C;
+      --brand-3: #C2410C;
+      --brand-soft: rgba(249, 115, 22, 0.14);
+      --brand-ring: rgba(249, 115, 22, 0.38);
+      --lift-shadow: 0 26px 50px -22px rgba(15, 23, 42, 0.32), 0 10px 20px -14px rgba(15, 23, 42, 0.18);
+      --sheen: rgba(255, 255, 255, 0.34);
+      --scroll-thumb: rgba(100, 116, 139, 0.38);
+      --aurora-opacity: 0.55;
+      color-scheme: light;
+    }
+    [data-theme="dark"] {
+      --brand-1: #FDBA74;
+      --brand-2: #F97316;
+      --brand-3: #EA580C;
+      --brand-soft: rgba(251, 146, 60, 0.16);
+      --brand-ring: rgba(251, 146, 60, 0.45);
+      --lift-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.75), 0 10px 24px -16px rgba(0, 0, 0, 0.55);
+      --sheen: rgba(255, 255, 255, 0.16);
+      --scroll-thumb: rgba(203, 213, 225, 0.32);
+      --aurora-opacity: 0.4;
+      color-scheme: dark;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    #view-login, #view-app { position: relative; z-index: 1; }
+
+    /* Aurora lembut di belakang kaca */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: var(--aurora-opacity);
+      transition: opacity 0.5s ease;
+    }
+    .aurora-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      will-change: transform;
+      animation: blobDrift 28s ease-in-out infinite alternate;
+    }
+    .aurora-blob:nth-child(1) { width: 48vw; height: 48vw; min-width: 320px; min-height: 320px; top: -14%; left: -10%; background: radial-gradient(circle at 35% 35%, #FDBA74 0%, rgba(253, 186, 116, 0) 68%); }
+    .aurora-blob:nth-child(2) { width: 42vw; height: 42vw; min-width: 280px; min-height: 280px; top: 4%; right: -12%; background: radial-gradient(circle at 60% 40%, #7DD3FC 0%, rgba(125, 211, 252, 0) 70%); animation-duration: 34s; animation-direction: alternate-reverse; }
+    .aurora-blob:nth-child(3) { width: 46vw; height: 46vw; min-width: 300px; min-height: 300px; bottom: -18%; left: 22%; background: radial-gradient(circle at 50% 50%, #6EE7B7 0%, rgba(110, 231, 183, 0) 70%); animation-duration: 40s; }
+    [data-theme="dark"] .aurora-blob:nth-child(1) { background: radial-gradient(circle at 35% 35%, #EA580C 0%, rgba(234, 88, 12, 0) 68%); }
+    [data-theme="dark"] .aurora-blob:nth-child(2) { background: radial-gradient(circle at 60% 40%, #0EA5E9 0%, rgba(14, 165, 233, 0) 70%); }
+    [data-theme="dark"] .aurora-blob:nth-child(3) { background: radial-gradient(circle at 50% 50%, #059669 0%, rgba(5, 150, 105, 0) 70%); }
+    @keyframes blobDrift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(4vw, 3vh, 0) scale(1.08); }
+      100% { transform: translate3d(-3vw, 5vh, 0) scale(0.96); }
+    }
+
+    /* Kaca: transisi lembut + ring cahaya */
+    .ios-glass, .ios-glass-strong, .ios-glass-subtle {
+      transition: background 0.4s ease, border-color 0.35s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ios-glass { box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-border-highlight); }
+    @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
+      .ios-glass { background: var(--glass-surface-strong); }
+      .ios-glass-strong { background: var(--glass-surface-strong); }
+    }
+
+    /* Logo & avatar */
+    .logo-badge {
+      box-shadow: 0 12px 24px -10px rgba(234, 88, 12, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+    .logo-badge:hover { transform: rotate(-7deg) scale(1.06); box-shadow: 0 16px 30px -10px rgba(234, 88, 12, 0.8); }
+    .avatar-ring { box-shadow: 0 0 0 2px var(--glass-surface-strong), 0 0 0 3px rgba(249, 115, 22, 0.5); }
+
+    /* Navigasi pil */
+    #role-nav {
+      width: max-content;
+      max-width: 100%;
+      padding: 4px;
+      border-radius: 16px;
+      background: var(--segment-bg);
+      border: 1px solid var(--glass-border);
+      scrollbar-width: none;
+    }
+    #role-nav::-webkit-scrollbar { display: none; }
+    #role-nav [data-tab] { position: relative; }
+    #role-nav [data-tab][aria-selected="true"] {
+      background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-2) 55%, var(--brand-3) 100%);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 10px 20px -10px rgba(234, 88, 12, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    #role-nav [data-tab][aria-selected="false"]:hover { background: var(--brand-soft); }
+
+    /* Tombol utama beraksen */
+    .btn-brand, .btn-danger {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      isolation: isolate;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, filter 0.25s ease;
+    }
+    .btn-brand {
+      background-image: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-2) 55%, var(--brand-3) 100%);
+      box-shadow: 0 10px 22px -10px rgba(234, 88, 12, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .btn-brand:hover { transform: translateY(-1px); filter: saturate(1.06) brightness(1.04); box-shadow: 0 16px 30px -12px rgba(234, 88, 12, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+    .btn-danger {
+      background-image: linear-gradient(135deg, #F87171 0%, #DC2626 60%, #B91C1C 100%);
+      box-shadow: 0 10px 22px -12px rgba(220, 38, 38, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    .btn-danger:hover { transform: translateY(-1px); filter: brightness(1.04); }
+    .btn-brand:active, .btn-danger:active { transform: translateY(0) scale(0.985); }
+    .btn-brand::after, .btn-danger::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(110deg, transparent 32%, rgba(255, 255, 255, 0.35) 48%, transparent 62%);
+      transform: translateX(-130%);
+      transition: transform 0.75s ease;
+    }
+    .btn-brand:hover::after, .btn-danger:hover::after { transform: translateX(130%); }
+
+    /* Kartu katalog */
+    .glass-card {
+      position: relative;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, border-color 0.35s ease;
+    }
+    .glass-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--brand-ring);
+      box-shadow: var(--lift-shadow), inset 0 1px 0 var(--glass-border-highlight);
+    }
+    .sheen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 35%, var(--sheen) 47%, transparent 58%);
+      transform: translateX(-120%);
+      transition: transform 0.9s ease;
+    }
+    .sheen:hover::after { transform: translateX(120%); }
+    .img-veil::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.34) 0%, rgba(15, 23, 42, 0) 46%);
+    }
+    .price-tag {
+      background-image: linear-gradient(135deg, #EA580C 0%, #D97706 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.01em;
+    }
+    [data-theme="dark"] .price-tag {
+      background-image: linear-gradient(135deg, #FDBA74 0%, #FCD34D 100%);
+    }
+
+    /* Pil kategori */
+    .pill-active {
+      background-image: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      border-color: transparent !important;
+      color: #fff !important;
+      box-shadow: 0 8px 16px -9px rgba(234, 88, 12, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+
+    /* Kartu statistik */
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.3s ease;
+    }
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 12%; bottom: 12%;
+      width: 3px;
+      border-radius: 999px;
+      background: var(--stat-accent, linear-gradient(180deg, #94A3B8, #64748B));
+      opacity: 0.95;
+    }
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      right: -28px; top: -34px;
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: var(--stat-glow, rgba(148, 163, 184, 0.16));
+      filter: blur(18px);
+      z-index: -1;
+    }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--brand-ring); box-shadow: var(--lift-shadow), inset 0 1px 0 var(--glass-border-highlight); }
+    .stat-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--stat-accent, #94A3B8); box-shadow: 0 0 0 3px var(--stat-glow, rgba(148, 163, 184, 0.2)); flex-shrink: 0; }
+    .stat-slate { --stat-accent: linear-gradient(180deg, #94A3B8, #64748B); --stat-glow: rgba(148, 163, 184, 0.22); }
+    .stat-orange { --stat-accent: linear-gradient(180deg, #FB923C, #EA580C); --stat-glow: rgba(249, 115, 22, 0.24); }
+    .stat-emerald { --stat-accent: linear-gradient(180deg, #34D399, #059669); --stat-glow: rgba(16, 185, 129, 0.22); }
+    .stat-amber { --stat-accent: linear-gradient(180deg, #FCD34D, #D97706); --stat-glow: rgba(245, 158, 11, 0.24); }
+    .stat-red { --stat-accent: linear-gradient(180deg, #F87171, #DC2626); --stat-glow: rgba(239, 68, 68, 0.22); }
+
+    /* Input & fokus */
+    .ios-input:hover { border-color: var(--brand-ring); }
+    :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+      outline: 2px solid #F97316;
+      outline-offset: 2px;
+    }
+
+    /* Baris tabel */
+    #seller-product-tbody tr, #admin-user-tbody tr { transition: background-color 0.2s ease, transform 0.2s ease; }
+
+    /* Scrollbar halus */
+    * { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    *::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 999px; border: 3px solid transparent; background-clip: content-box; }
+    *::-webkit-scrollbar-thumb:hover { background: var(--brand-2); border: 3px solid transparent; background-clip: content-box; }
+
+    /* Elemen dekoratif melayang */
+    .hero-panel { position: relative; isolation: isolate; }
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 150% at 12% 0%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 55%),
+        linear-gradient(118deg, transparent 42%, rgba(255, 255, 255, 0.14) 50%, transparent 58%);
+    }
+    .float-slow { animation: floatY 9s ease-in-out infinite; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }

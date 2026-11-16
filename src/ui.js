@@ -3,7 +3,7 @@
    ================================================================ */
 
 import {
-  db, session, ROLE_META, TABS_BY_ROLE, DEMO_ACCOUNTS, THEME_KEY,
+  db, session, ROLE_META, TABS_BY_ROLE, THEME_KEY,
   currentUser, authenticate, startSession, endSession, saveDatabase, logAction,
   findUser, productCountFor, productsForSeller, visibleProducts, sellerOf,
   createProduct, updateProduct, deleteProduct,
@@ -151,7 +151,7 @@ export function showLoginView() {
   $('app-header').classList.add('hidden');
   $('view-app').classList.add('hidden');
   $('view-login').classList.remove('hidden');
-  renderDemoAccounts();
+  resetPasswordVisibility();
   const emailInput = $('login-email');
   if (emailInput) emailInput.focus();
 }
@@ -952,20 +952,31 @@ export function hideLoginError() {
   $('login-error').classList.add('hidden');
 }
 
-export function renderDemoAccounts() {
-  $('demo-accounts').innerHTML = DEMO_ACCOUNTS.map(account => `
-    <button type="button" onclick="fillDemoLogin('${account.email}','${account.password}')"
-      class="ios-tap text-left p-2.5 rounded-xl ios-glass-subtle border ios-divider hover:border-orange-400">
-      <p class="text-[11px] font-extrabold ink-primary">${ROLE_META[account.role].icon} ${ROLE_META[account.role].label}</p>
-      <p class="text-[10px] font-medium ink-muted truncate">${escapeHtml(account.email)}</p>
-    </button>`).join('');
+export function togglePasswordVisibility() {
+  const input = $('login-password');
+  const toggle = $('login-password-toggle');
+  const show = input.type === 'password';
+
+  input.type = show ? 'text' : 'password';
+  toggle.setAttribute('aria-pressed', String(show));
+  toggle.setAttribute('aria-label', show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+  toggle.title = show ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi';
+  $('login-eye-open').classList.toggle('hidden', show);
+  $('login-eye-off').classList.toggle('hidden', !show);
+  input.focus();
 }
 
-export function fillDemoLogin(email, password) {
-  $('login-email').value = email;
-  $('login-password').value = password;
-  hideLoginError();
-  $('login-password').focus();
+export function resetPasswordVisibility() {
+  const input = $('login-password');
+  const toggle = $('login-password-toggle');
+  if (!input || !toggle) return;
+
+  input.type = 'password';
+  toggle.setAttribute('aria-pressed', 'false');
+  toggle.setAttribute('aria-label', 'Tampilkan kata sandi');
+  toggle.title = 'Tampilkan kata sandi';
+  $('login-eye-open').classList.remove('hidden');
+  $('login-eye-off').classList.add('hidden');
 }
 
 export function login(email, password) {

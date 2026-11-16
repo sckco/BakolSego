@@ -30,7 +30,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 ## 2. Ruang Lingkup
 
 ### Termasuk
-- Halaman login dengan akun demo sekali klik.
+- Halaman login dengan email/password dan tombol tampilkan/sembunyikan kata sandi.
 - Sesi login persisten (bertahan setelah refresh) dan logout.
 - Tiga dashboard per peran dengan navigasi berbeda.
 - CRUD pengguna (admin), CRUD produk (seller), katalog + pesanan WhatsApp (pembeli).
@@ -73,7 +73,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 
 ### 4.1 Login
 1. Pengguna membuka aplikasi → bila sesi valid, langsung masuk dashboard peran; bila tidak, tampil halaman login.
-2. Pengguna mengisi email + password, atau memilih salah satu kartu akun demo (mengisi form otomatis).
+2. Pengguna mengisi email + password; ikon mata di kolom kata sandi bisa menampilkan atau menyembunyikan isinya.
 3. Sistem mencari user dengan email (case-insensitive), membandingkan hash password, dan memeriksa status aktif.
 4. Gagal → pesan generik "Email atau password salah" (tidak membocorkan akun mana yang ada).
 5. Berhasil → sesi disimpan, audit log mencatat `login`, dashboard peran dirender.
@@ -204,7 +204,7 @@ Semua pesan kesalahan ditampilkan inline di atas form (daftar) dan fokus ke fiel
 
 - **Header**: brand, chip peran, nama pengguna, tombol tema, tombol keluar.
 - **Navigasi tab** menyesuaikan peran; tab aktif memakai gaya segmented control.
-- **Login**: kartu glass, form, kotak error, daftar akun demo yang bisa diklik.
+- **Login**: kartu glass, form email/password dengan tombol lihat kata sandi, dan kotak error.
 - **Tabel** dapat di-scroll horizontal di layar kecil; kartu statistik grid 2–5 kolom.
 - **Modal**: form produk, form user, konfirmasi, pratinjau WhatsApp; tutup via tombol, overlay, dan `Escape`.
 - **Toast**: sukses / error / info, hilang otomatis 3,5 detik.

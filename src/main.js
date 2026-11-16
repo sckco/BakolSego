@@ -12,6 +12,7 @@ const $ = (id) => document.getElementById(id);
    ================================================================ */
 export function bindEvents() {
   $('login-form').addEventListener('submit', UI.handleLoginSubmit);
+  $('login-password-toggle').addEventListener('click', UI.togglePasswordVisibility);
   $('product-form').addEventListener('submit', UI.handleProductSubmit);
   $('user-form').addEventListener('submit', UI.handleUserSubmit);
 
@@ -80,7 +81,6 @@ export function registerGlobals() {
     logout: UI.logout,
     switchTab: UI.switchTab,
     toggleTheme: UI.toggleTheme,
-    fillDemoLogin: UI.fillDemoLogin,
     openProductModal: UI.openProductModal,
     closeModal: UI.closeModal,
     applyImagePreset: UI.applyImagePreset,
@@ -96,6 +96,7 @@ export function registerGlobals() {
     clearCatalogSearch: UI.clearCatalogSearch,
     resetCatalogFilters: UI.resetCatalogFilters,
     runConfirm: UI.runConfirm,
+    togglePasswordVisibility: UI.togglePasswordVisibility,
 
     /* Dipakai untuk pengujian dan debugging dari konsol. */
     renderApp: UI.renderApp,

@@ -30,13 +30,6 @@ export const TABS_BY_ROLE = {
   ]
 };
 
-export const DEMO_ACCOUNTS = [
-  { email: 'admin@bakolsego.id', password: 'admin123', role: 'admin' },
-  { email: 'sari@bakolsego.id', password: 'seller123', role: 'seller' },
-  { email: 'joko@bakolsego.id', password: 'seller123', role: 'seller' },
-  { email: 'budi@bakolsego.id', password: 'buyer123', role: 'buyer' }
-];
-
 /* State bersama. Hanya dimutasi lewat fungsi di modul ini. */
 export let db = null;
 export let session = null;

@@ -49,6 +49,20 @@ Data awal: 7 pengguna dan 10 produk. Untuk kembali ke kondisi bersih, login seba
 
 Masuk memakai salah satu akun demo di atas untuk mencoba ketiga peran. Karena data disimpan di `localStorage`, setiap pengunjung mendapat salinan data demo sendiri — bebas dicoba tanpa mengganggu pengunjung lain.
 
+## Menjalankan
+
+```bash
+npm install     # sekali saja
+npm run dev     # http://localhost:5173
+```
+
+```bash
+npm run build     # hasil produksi di dist/
+npm run preview   # cek hasil build secara lokal
+```
+
+Karena memakai ES module, `index.html` **tidak bisa** dibuka langsung lewat `file://`. Hasil build memakai path relatif (`base: './'`), jadi folder `dist/` bisa ditaruh di subfolder hosting mana pun.
+
 ## Struktur Proyek
 
 ```

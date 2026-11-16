@@ -21,7 +21,7 @@ Dibuat oleh [Buffy](https://codebuff.com) 🤖
 
 BakolSego adalah web statis untuk UMKM kuliner: **admin** mengelola pengguna, **seller** mengelola produknya sendiri, dan **pembeli** menjelajah katalog lalu memesan lewat WhatsApp. Semua data disimpan di `localStorage` browser — tanpa backend, tanpa database, tanpa biaya server.
 
-Tampilannya memakai gaya *glassmorphism* iOS dengan tema terang/gelap, dan tetap nyaman dari layar 320px sampai desktop.
+Saat pertama dibuka, pengunjung langsung melihat **katalog publik** tanpa perlu login. Tombol **Masuk** dan **Daftar** ada di kanan atas; login baru diwajibkan ketika akan memesan atau mengelola data. Tampilannya memakai gaya *glassmorphism* iOS dengan tema terang/gelap, dan tetap nyaman dari layar 320px sampai desktop.
 
 ## Fitur
 
@@ -30,6 +30,8 @@ Tampilannya memakai gaya *glassmorphism* iOS dengan tema terang/gelap, dan tetap
 | 🛡️ **Admin** | Buat, ubah, nonaktifkan, dan hapus akun; reset password; atur nomor WhatsApp admin; lihat audit log; reset data demo |
 | 🏪 **Seller** | Tambah, edit, hapus produk **miliknya sendiri**; atur harga, stok, kategori, gambar, dan label unggulan |
 | 🛒 **Pembeli** | Cari produk/toko, filter kategori, urutkan, lihat detail, lalu checkout langsung ke WhatsApp seller |
+| 👀 **Pengunjung** | Lihat katalog dan detail produk tanpa login; diarahkan masuk/daftar saat mencoba memesan |
+| 🆕 **Pendaftaran** | Daftar mandiri sebagai pembeli memakai email **@gmail.com**, langsung masuk ke katalog setelah akun dibuat |
 
 Detail kecil yang sudah diurus: isolasi data antar-seller, akun nonaktif tidak bisa login, validasi form, escaping HTML anti-XSS, dan nomor telepon dinormalisasi ke format `62...`.
 
@@ -40,6 +42,8 @@ Detail kecil yang sudah diurus: isolasi data antar-seller, akun nonaktif tidak b
 | Admin | `admin@bakolsego.id` | `admin123` |
 | Seller | `sari@bakolsego.id` · `joko@bakolsego.id` · `rina@bakolsego.id` | `seller123` |
 | Pembeli | `budi@bakolsego.id` · `sinta@bakolsego.id` · `dewi@bakolsego.id` | `buyer123` |
+
+Akun demo di atas tetap bisa dipakai login walau bukan Gmail. Khusus pendaftaran mandiri, email **wajib** berformat `@gmail.com`.
 
 Data awal: 7 pengguna dan 10 produk. Untuk kembali ke kondisi bersih, login sebagai admin → **Pengaturan** → **Reset Data Demo**.
 

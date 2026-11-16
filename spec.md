@@ -30,8 +30,10 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 ## 2. Ruang Lingkup
 
 ### Termasuk
+- Katalog publik yang langsung tampil tanpa login, dengan tombol **Masuk** dan **Daftar** di kanan atas.
 - Halaman login dengan email/password dan tombol tampilkan/sembunyikan kata sandi.
-- Sesi login persisten (bertahan setelah refresh) dan logout.
+- Registrasi mandiri akun pembeli dengan email wajib `@gmail.com`.
+- Sesi login persisten (bertahan setelah refresh) dan logout kembali ke katalog publik.
 - Tiga dashboard per peran dengan navigasi berbeda.
 - CRUD pengguna (admin), CRUD produk (seller), katalog + pesanan WhatsApp (pembeli).
 - Pengaturan nomor WhatsApp toko, reset data demo, audit log.
@@ -61,7 +63,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 | Reset seluruh data demo | ✅ | ❌ | ❌ |
 
 **Aturan penjagaan:**
-- Pengguna tanpa sesi valid selalu diarahkan ke halaman login.
+- Tamu boleh melihat katalog, tetapi setiap aksi (memesan, mengelola produk/user) memerlukan sesi valid dan peran yang sesuai.
 - Setiap aksi sensitif memeriksa ulang peran dan kepemilikan data (bukan hanya menyembunyikan tombol).
 - Admin tidak dapat menonaktifkan atau menghapus akunnya sendiri.
 - Seller dengan produk aktif tidak dapat dihapus; gunakan **nonaktifkan** agar produknya juga tidak tayang.
@@ -72,14 +74,21 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 ## 4. Alur Utama
 
 ### 4.1 Login
-1. Pengguna membuka aplikasi → bila sesi valid, langsung masuk dashboard peran; bila tidak, tampil halaman login.
-2. Pengguna mengisi email + password; ikon mata di kolom kata sandi bisa menampilkan atau menyembunyikan isinya.
+1. Pengguna membuka aplikasi → katalog publik langsung tampil; bila sesi valid, dashboard peran dimuat otomatis.
+2. Pengguna menekan **Masuk** di kanan atas lalu mengisi email + password; ikon mata di kolom kata sandi bisa menampilkan atau menyembunyikan isinya.
 3. Sistem mencari user dengan email (case-insensitive), membandingkan hash password, dan memeriksa status aktif.
 4. Gagal → pesan generik "Email atau password salah" (tidak membocorkan akun mana yang ada).
 5. Berhasil → sesi disimpan, audit log mencatat `login`, dashboard peran dirender.
-6. Logout → sesi dihapus, state UI direset, kembali ke login.
+6. Logout → sesi dihapus, state UI direset, kembali ke katalog publik.
 
-### 4.2 Admin — Kelola User
+### 4.2 Registrasi Pembeli
+1. Pengunjung menekan **Daftar** di kanan atas atau tautan "Daftar sekarang" di halaman login.
+2. Form: nama (2–60 karakter), email wajib berakhiran `@gmail.com`, nomor WhatsApp (10–15 digit), password minimal 6 karakter.
+3. Email duplikat dan format selain Gmail ditolak dengan pesan inline.
+4. Berhasil → akun pembeli dibuat, sesi langsung dimulai, audit log mencatat `register`, dan katalog tampil.
+5. Akun seller tetap dibuat oleh admin melalui Kelola User.
+
+### 4.3 Admin — Kelola User
 1. Admin membuka tab **Kelola User**; tabel menampilkan nama, email, peran, kontak, jumlah produk, status, aksi.
 2. Pencarian (nama/email/toko) dan filter peran tersedia.
 3. **Tambah user**: nama, email, password awal, peran, nomor WhatsApp, nama toko (wajib untuk seller).
@@ -88,14 +97,14 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 6. **Hapus user**: hanya jika bukan diri sendiri dan seller tanpa produk. Konfirmasi wajib.
 7. Semua aksi tercatat di audit log.
 
-### 4.3 Seller — Kelola Produk
+### 4.4 Seller — Kelola Produk
 1. Seller membuka tab **Produk Saya**; ringkasan statistik (total, tayang, stok menipis, habis, nilai inventaris) + tabel produk miliknya.
 2. **Tambah produk**: nama, kategori, harga, stok, deskripsi, gambar (URL/preset), unggulan, status tayang.
 3. **Edit / hapus** hanya untuk produk dengan `sellerId` miliknya.
 4. Stok 0 otomatis ditandai "Habis" dan tombol pesan dinonaktifkan di katalog pembeli.
 5. Perubahan langsung tersimpan ke localStorage dan terlihat di katalog pembeli.
 
-### 4.4 Pembeli — Pilih Produk & WhatsApp
+### 4.5 Pembeli — Pilih Produk & WhatsApp
 1. Pembeli melihat katalog produk **aktif** dari **seller aktif**.
 2. Filter: pencarian (nama/deskripsi/toko), kategori, hanya unggulan, urutan (unggulan, harga, stok, nama).
 3. Kartu produk menampilkan gambar, kategori, toko, harga, stok, dan tombol **Pesan via WhatsApp**.
@@ -232,7 +241,7 @@ Mitigasi yang tetap diterapkan:
 
 ## 9. Kriteria Penerimaan
 
-1. Membuka aplikasi tanpa sesi menampilkan halaman login; tidak ada data dashboard yang terlihat.
+1. Membuka aplikasi tanpa sesi menampilkan katalog publik; tidak ada dashboard peran yang terlihat dan aksi memesan mengarahkan ke login.
 2. Login dengan tiap akun dummy membuka dashboard peran yang sesuai; setelah refresh sesi tetap aktif.
 3. Pembeli tidak melihat tombol/menu kelola produk atau kelola user; memanggil aksi terlarang via konsol ditolak.
 4. Seller hanya melihat dan dapat mengubah produk miliknya; produk seller lain tidak muncul di tabelnya.
@@ -243,6 +252,7 @@ Mitigasi yang tetap diterapkan:
 9. Tombol WhatsApp membuka `wa.me` dengan nomor seller yang benar dan pesan berisi nama produk, harga, serta nama pembeli.
 10. Filter pencarian, kategori, unggulan, dan urutan bekerja serta menampilkan jumlah hasil yang benar.
 11. Validasi menolak email duplikat, password < 6 karakter, harga negatif, stok desimal, dan deskripsi terlalu pendek.
+12. Registrasi menolak email selain `@gmail.com` dan email duplikat; email Gmail baru langsung membuat akun pembeli dan masuk ke katalog.
 12. Semua data bertahan setelah refresh; "Reset Data Demo" mengembalikan 7 user dan 10 produk awal.
 13. Tidak ada error runtime di konsol pada alur utama; tema terang/gelap berfungsi.
 

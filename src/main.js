@@ -13,6 +13,7 @@ const $ = (id) => document.getElementById(id);
 export function bindEvents() {
   $('login-form').addEventListener('submit', UI.handleLoginSubmit);
   $('login-password-toggle').addEventListener('click', UI.togglePasswordVisibility);
+  $('register-form').addEventListener('submit', UI.handleRegisterSubmit);
   $('product-form').addEventListener('submit', UI.handleProductSubmit);
   $('user-form').addEventListener('submit', UI.handleUserSubmit);
 
@@ -79,6 +80,9 @@ export function registerGlobals() {
     initApp,
     login: UI.login,
     logout: UI.logout,
+    showLogin: UI.showLoginView,
+    showRegister: UI.showRegisterView,
+    showGuest: UI.showGuestView,
     switchTab: UI.switchTab,
     toggleTheme: UI.toggleTheme,
     openProductModal: UI.openProductModal,
@@ -106,6 +110,7 @@ export function registerGlobals() {
     renderAdminSettings: UI.renderAdminSettings,
     handleProductSubmit: UI.handleProductSubmit,
     handleUserSubmit: UI.handleUserSubmit,
+    handleRegisterSubmit: UI.handleRegisterSubmit,
     askConfirm: UI.askConfirm,
     hashPassword,
     sha256Hex,

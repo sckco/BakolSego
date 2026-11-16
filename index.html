@@ -30,7 +30,7 @@
   </div>
 
   <!-- ==================================================================
-       HEADER (hanya saat login)
+       HEADER (tamu maupun setelah login)
        ================================================================== -->
   <header id="app-header" class="hidden sticky top-0 z-40 ios-glass-strong border-b ios-divider">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +52,13 @@
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
-          <div class="hidden sm:flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-2xl ios-glass-subtle">
+          <div id="guest-actions" class="hidden items-center gap-2">
+            <button type="button" onclick="showLogin()"
+              class="ios-tap px-3.5 py-2.5 rounded-2xl ios-glass-subtle ink-primary text-xs font-extrabold">Masuk</button>
+            <button type="button" onclick="showRegister()"
+              class="ios-tap px-3.5 py-2.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-extrabold shadow-md shadow-orange-600/20">Daftar</button>
+          </div>
+          <div id="header-user-box" class="hidden sm:flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-2xl ios-glass-subtle">
             <div id="header-user-initials" class="avatar-ring w-8 h-8 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center text-xs font-extrabold"></div>
             <div class="leading-tight">
               <p id="header-user-name" class="text-xs font-extrabold ink-primary max-w-[140px] truncate"></p>
@@ -82,7 +88,7 @@
   <!-- ==================================================================
        LOGIN
        ================================================================== -->
-  <section id="view-login" class="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+  <section id="view-login" class="hidden flex-1 items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
     <div class="w-full max-w-5xl grid lg:grid-cols-2 gap-6 items-stretch">
 
       <div class="hero-panel relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-700 via-orange-600 to-amber-600 text-white p-7 sm:p-9 shadow-xl shadow-orange-600/20 border border-white/20 flex flex-col justify-between gap-8">
@@ -151,9 +157,82 @@
           </button>
         </form>
 
-        <div class="mt-6 pt-5 border-t ios-divider">
+        <div class="mt-6 pt-5 border-t ios-divider space-y-3">
+          <p class="text-xs font-semibold ink-secondary">Belum punya akun?
+            <button type="button" onclick="showRegister()" class="font-extrabold text-orange-700 dark:text-orange-300 hover:underline">Daftar sekarang</button>
+          </p>
+          <button type="button" onclick="showGuest()" class="ios-tap inline-flex items-center gap-1.5 text-xs font-bold ink-muted hover:ink-primary">
+            <span aria-hidden="true">←</span><span>Kembali ke katalog</span>
+          </button>
           <p class="text-[11px] font-medium ink-muted leading-relaxed">
             Aplikasi demo: data disimpan di <code class="font-bold">localStorage</code> perangkat ini dan tidak boleh dipakai untuk data pelanggan nyata.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       DAFTAR AKUN PEMBELI
+       ================================================================== -->
+  <section id="view-register" class="hidden flex-1 items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
+    <div class="w-full max-w-md">
+      <div class="ios-glass rounded-3xl p-6 sm:p-8 animate-ios-card">
+        <div class="space-y-1 mb-5">
+          <div class="logo-badge w-11 h-11 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white mb-3">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M19 8v6" /><path d="M22 11h-6" />
+            </svg>
+          </div>
+          <h2 class="font-display text-xl font-extrabold ink-primary">Buat akun pembeli</h2>
+          <p class="text-xs font-medium ink-muted">Daftar gratis untuk mulai memesan menu dari UMKM lokal.</p>
+        </div>
+
+        <div id="register-error" class="hidden mb-4 p-3.5 rounded-2xl bg-red-600 text-white text-xs font-bold flex items-start gap-2 shadow-md" role="alert">
+          <span aria-hidden="true">⚠️</span><span id="register-error-text"></span>
+        </div>
+
+        <form id="register-form" novalidate class="space-y-4">
+          <div>
+            <label for="register-name" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nama Lengkap</label>
+            <input id="register-name" name="name" type="text" autocomplete="name" required
+              placeholder="Nama Anda"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+          </div>
+          <div>
+            <label for="register-email" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Email Gmail</label>
+            <input id="register-email" name="email" type="email" autocomplete="email" required
+              placeholder="nama@gmail.com"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+            <p class="mt-1.5 text-[11px] font-medium ink-muted">Wajib memakai alamat <code class="font-bold">@gmail.com</code>.</p>
+          </div>
+          <div>
+            <label for="register-phone" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Nomor WhatsApp</label>
+            <input id="register-phone" name="phone" type="tel" autocomplete="tel" required
+              placeholder="0812xxxxxxxx"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+          </div>
+          <div>
+            <label for="register-password" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Password</label>
+            <input id="register-password" name="password" type="password" autocomplete="new-password" required
+              placeholder="Minimal 6 karakter"
+              class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
+          </div>
+          <button type="submit"
+            class="btn-brand w-full py-3 px-4 rounded-2xl text-sm font-extrabold flex items-center justify-center gap-2">
+            <span>Daftar &amp; Mulai Pesan</span>
+          </button>
+        </form>
+
+        <div class="mt-6 pt-5 border-t ios-divider space-y-3">
+          <p class="text-xs font-semibold ink-secondary">Sudah punya akun?
+            <button type="button" onclick="showLogin()" class="font-extrabold text-orange-700 dark:text-orange-300 hover:underline">Masuk di sini</button>
+          </p>
+          <button type="button" onclick="showGuest()" class="ios-tap inline-flex items-center gap-1.5 text-xs font-bold ink-muted hover:ink-primary">
+            <span aria-hidden="true">←</span><span>Kembali ke katalog</span>
+          </button>
+          <p class="text-[11px] font-medium ink-muted leading-relaxed">
+            Akun seller dibuat oleh admin. Pendaftaran mandiri hanya untuk pembeli.
           </p>
         </div>
       </div>

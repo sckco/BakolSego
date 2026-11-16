@@ -141,23 +141,84 @@ export function renderApp() {
   const user = currentUser();
   if (!user || !user.active) {
     if (session) endSession();
-    showLoginView();
+    showGuestView();
     return;
   }
   showAppView(user);
 }
 
+/** Tampilkan/ sembunyikan elemen header khusus tamu. */
+function setGuestHeader(isGuest) {
+  const guestActions = $('guest-actions');
+  const userBox = $('header-user-box');
+  const logoutBtn = $('btn-logout');
+  const roleChip = $('header-role-chip');
+  if (!guestActions || !userBox || !logoutBtn) return;
+
+  if (isGuest) {
+    guestActions.classList.remove('hidden');
+    guestActions.classList.add('flex');
+    userBox.classList.add('hidden');
+    userBox.classList.remove('sm:flex');
+    logoutBtn.classList.add('hidden');
+    roleChip.classList.add('hidden');
+  } else {
+    guestActions.classList.add('hidden');
+    guestActions.classList.remove('flex');
+    userBox.classList.remove('hidden');
+    userBox.classList.add('sm:flex');
+    logoutBtn.classList.remove('hidden');
+  }
+}
+
+/** Katalog publik: bisa dilihat tanpa login. */
+export function showGuestView() {
+  $('app-header').classList.remove('hidden');
+  $('view-login').classList.add('hidden');
+  $('view-register').classList.add('hidden');
+  $('view-app').classList.remove('hidden');
+  $('role-nav').innerHTML = '';
+  ['seller', 'admin-users', 'admin-settings'].forEach(id => {
+    const section = $('section-' + id);
+    if (section) section.classList.add('hidden');
+  });
+  $('section-catalog').classList.remove('hidden');
+  setGuestHeader(true);
+  hideLoginError();
+  hideRegisterError();
+  resetPasswordVisibility();
+  ui.activeTab = null;
+  renderCatalog();
+}
+
 export function showLoginView() {
   $('app-header').classList.add('hidden');
   $('view-app').classList.add('hidden');
+  $('view-register').classList.add('hidden');
   $('view-login').classList.remove('hidden');
+  $('view-login').classList.add('flex');
+  hideLoginError();
   resetPasswordVisibility();
   const emailInput = $('login-email');
   if (emailInput) emailInput.focus();
 }
 
-export function showAppView(user) {
+export function showRegisterView() {
+  $('app-header').classList.add('hidden');
+  $('view-app').classList.add('hidden');
   $('view-login').classList.add('hidden');
+  $('view-register').classList.remove('hidden');
+  $('view-register').classList.add('flex');
+  hideRegisterError();
+  $('register-form').reset();
+  const nameInput = $('register-name');
+  if (nameInput) nameInput.focus();
+}
+
+export function showAppView(user) {
+  setGuestHeader(false);
+  $('view-login').classList.add('hidden');
+  $('view-register').classList.add('hidden');
   $('app-header').classList.remove('hidden');
   $('view-app').classList.remove('hidden');
 
@@ -256,7 +317,6 @@ export function renderCategoryPills() {
 }
 
 export function renderCatalog() {
-  if (!ensureRole('buyer', 'admin', 'seller')) return;
   renderCategoryPills();
 
   const heroNumber = $('catalog-hero-wa-number');
@@ -357,8 +417,16 @@ export function resetCatalogFilters() {
 }
 
 export function orderViaWhatsApp(productId) {
-  const buyer = ensureRole('buyer');
-  if (!buyer) return;
+  const buyer = currentUser();
+  if (!buyer) {
+    toast('Masuk atau daftar dulu untuk memesan.', 'info');
+    showLoginView();
+    return;
+  }
+  if (buyer.role !== 'buyer') {
+    toast('Hanya akun pembeli yang bisa memesan lewat WhatsApp.', 'error');
+    return;
+  }
 
   const product = visibleProducts().find(p => p.id === productId);
   if (!product) { toast('Produk tidak tersedia atau sudah disembunyikan.', 'error'); return; }
@@ -950,6 +1018,50 @@ export function showLoginError(message) {
 
 export function hideLoginError() {
   $('login-error').classList.add('hidden');
+}
+
+const GMAIL_PATTERN = /^[a-z0-9][a-z0-9._%+-]*@gmail\.com$/i;
+
+export function showRegisterError(message) {
+  $('register-error-text').textContent = message;
+  $('register-error').classList.remove('hidden');
+}
+
+export function hideRegisterError() {
+  $('register-error').classList.add('hidden');
+}
+
+export function handleRegisterSubmit(event) {
+  event.preventDefault();
+  const name = $('register-name').value.trim();
+  const email = $('register-email').value.trim().toLowerCase();
+  const phone = normalizePhone($('register-phone').value.trim());
+  const password = $('register-password').value;
+
+  const errors = [];
+  if (name.length < 2 || name.length > 60) errors.push('Nama wajib 2–60 karakter.');
+  if (!GMAIL_PATTERN.test(email)) {
+    errors.push('Email wajib memakai format nama@gmail.com.');
+  } else if (db.users.some(u => u.email.toLowerCase() === email)) {
+    errors.push('Email ini sudah terdaftar. Silakan masuk.');
+  }
+  if (!/^[0-9]{10,15}$/.test(phone)) errors.push('Nomor WhatsApp tidak valid (10–15 digit).');
+  if (password.length < 6) errors.push('Password minimal 6 karakter.');
+
+  if (errors.length) {
+    showRegisterError(errors.join(' '));
+    return;
+  }
+
+  const user = createUser({ name, email, phone, password, role: 'buyer' });
+  startSession(user.id);
+  logAction('register', `Mendaftar akun pembeli baru (${email}).`);
+  saveDatabase();
+  hideRegisterError();
+  $('register-form').reset();
+  ui.activeTab = null;
+  renderApp();
+  toast(`Akun berhasil dibuat. Selamat datang, ${name.split(' ')[0]}!`, 'success');
 }
 
 export function togglePasswordVisibility() {

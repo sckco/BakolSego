@@ -21,7 +21,7 @@ Dibuat oleh [Buffy](https://codebuff.com) 🤖
 
 BakolSego adalah web statis untuk UMKM kuliner: **admin** mengelola pengguna, **seller** mengelola produknya sendiri, dan **pembeli** menjelajah katalog lalu memesan lewat WhatsApp. Semua data disimpan di `localStorage` browser — tanpa backend, tanpa database, tanpa biaya server.
 
-Saat pertama dibuka, pengunjung langsung melihat **katalog publik** tanpa perlu login. Tombol **Masuk** dan **Daftar** ada di kanan atas; login baru diwajibkan ketika akan memesan atau mengelola data. Tampilannya memakai gaya *glassmorphism* iOS dengan tema terang/gelap, dan tetap nyaman dari layar 320px sampai desktop.
+Saat pertama dibuka, pengunjung langsung melihat **katalog publik** tanpa perlu login. Tombol **Masuk** dan **Daftar** ada di kanan atas; login baru diwajibkan ketika akan memesan atau mengelola data.
 
 ## Fitur
 

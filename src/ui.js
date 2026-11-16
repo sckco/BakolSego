@@ -368,8 +368,8 @@ export function orderViaWhatsApp(productId) {
   const number = normalizePhone((seller && seller.phone) || db.settings.whatsappNumber || '');
   if (!number) { toast('Nomor WhatsApp penjual belum diatur.', 'error'); return; }
 
-  const storeName = seller ? seller.storeName : db.settings.storeName;
-  const message = `Halo ${storeName}, saya ${buyer.name} ingin memesan:\n` +
+  const greetingName = db.settings.storeName || 'BakolSego';
+  const message = `Halo ${greetingName}, saya ${buyer.name} ingin memesan:\n` +
     `• Produk: *${product.name}*\n` +
     `• Kategori: ${product.category}\n` +
     `• Harga: ${formatRupiah(product.price)}\n` +

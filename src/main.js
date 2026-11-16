@@ -45,7 +45,7 @@ export function bindEvents() {
   });
   $('settings-wa').addEventListener('input', UI.updateWaPreview);
   $('user-role').addEventListener('change', UI.syncUserRoleFields);
-  $('product-image').addEventListener('input', UI.updateProductImagePreview);
+  $('product-image-file').addEventListener('change', UI.handleProductImageSelect);
   $('product-name').addEventListener('input', () => {
     if (!$('product-image').value) UI.updateProductImagePreview();
   });
@@ -88,7 +88,7 @@ export function registerGlobals() {
     toggleTheme: UI.toggleTheme,
     openProductModal: UI.openProductModal,
     closeModal: UI.closeModal,
-    applyImagePreset: UI.applyImagePreset,
+    clearProductImage: UI.clearProductImage,
     confirmDeleteProduct: UI.confirmDeleteProduct,
     openUserModal: UI.openUserModal,
     toggleUserActive: UI.toggleUserActive,

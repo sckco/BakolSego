@@ -574,25 +574,109 @@ export function renderSellerPanel() {
 /* ================================================================
    MODAL PRODUK
    ================================================================ */
+const IMAGE_MAX_BYTES = 2 * 1024 * 1024;
+const IMAGE_MAX_SIDE = 1200;
+const IMAGE_HELP_TEXT = 'PNG atau JPG, maksimal 2 MB. Gambar otomatis dikompres agar muat di penyimpanan lokal.';
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('Gagal membaca file gambar.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImageElement(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('File gambar tidak valid.'));
+    img.src = src;
+  });
+}
+
+/** Validasi PNG/JPG maks 2 MB, lalu perkecil agar aman disimpan di localStorage. */
+async function prepareProductImage(file) {
+  if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+    throw new Error('Format gambar harus PNG atau JPG.');
+  }
+  if (file.size > IMAGE_MAX_BYTES) {
+    throw new Error('Ukuran gambar maksimal 2 MB.');
+  }
+
+  const source = await fileToDataUrl(file);
+  const img = await loadImageElement(source);
+  const originalWidth = img.naturalWidth || img.width;
+  const originalHeight = img.naturalHeight || img.height;
+  const scale = Math.min(1, IMAGE_MAX_SIDE / Math.max(originalWidth, originalHeight));
+  const width = Math.max(1, Math.round(originalWidth * scale));
+  const height = Math.max(1, Math.round(originalHeight * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return source;
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, width, height);
+  ctx.drawImage(img, 0, 0, width, height);
+
+  let dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+  if (file.type === 'image/png') {
+    const png = canvas.toDataURL('image/png');
+    if (png.length < dataUrl.length) dataUrl = png;
+  }
+  return dataUrl;
+}
+
 export function updateProductImagePreview() {
   const preview = $('product-image-preview');
   if (!preview) return;
-  const typed = safeImageUrl($('product-image').value);
+  const stored = safeImageUrl($('product-image').value);
   const category = $('product-category').value;
   const name = $('product-name').value.trim() || category;
-  preview.src = typed || createLocalFoodSvg(category, name);
+  preview.src = stored || createLocalFoodSvg(category, name);
+  const clearButton = $('btn-clear-product-image');
+  if (clearButton) clearButton.classList.toggle('hidden', !stored);
 }
 
-export function renderPresetButtons() {
-  $('product-preset-list').innerHTML = CATEGORIES.map(category => `
-    <button type="button" onclick="applyImagePreset('${category}')" class="ios-tap px-2.5 py-1.5 rounded-xl ios-glass-subtle text-[11px] font-bold ink-primary">
-      ${escapeHtml(category)}
-    </button>`).join('');
+export async function handleProductImageSelect(event) {
+  const input = event.target;
+  const file = input.files && input.files[0];
+  if (!file) return;
+
+  const info = $('product-image-info');
+  try {
+    const dataUrl = await prepareProductImage(file);
+    $('product-image').value = dataUrl;
+    updateProductImagePreview();
+    const compressedKb = Math.max(1, Math.round(dataUrl.length * 0.75 / 1024));
+    info.textContent = `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} MB → ±${compressedKb} KB setelah dikompres.`;
+    info.classList.remove('text-red-600');
+    info.classList.add('ink-muted');
+  } catch (err) {
+    input.value = '';
+    $('product-image').value = '';
+    updateProductImagePreview();
+    info.textContent = err.message;
+    info.classList.add('text-red-600');
+    info.classList.remove('ink-muted');
+    toast(err.message, 'error');
+  }
 }
 
-export function applyImagePreset(category) {
-  $('product-category').value = category;
-  $('product-image').value = createLocalFoodSvg(category, $('product-name').value.trim() || category);
+export function clearProductImage() {
+  const fileInput = $('product-image-file');
+  if (fileInput) fileInput.value = '';
+  $('product-image').value = '';
+  const info = $('product-image-info');
+  if (info) {
+    info.textContent = IMAGE_HELP_TEXT;
+    info.classList.remove('text-red-600');
+    info.classList.add('ink-muted');
+  }
   updateProductImagePreview();
 }
 
@@ -619,10 +703,13 @@ export function openProductModal(productId = null) {
   $('product-stock').value = product ? String(product.stock) : '';
   $('product-desc').value = product ? product.description : '';
   $('product-image').value = product ? (product.imageUrl || '') : '';
+  $('product-image-file').value = '';
+  $('product-image-info').textContent = IMAGE_HELP_TEXT;
+  $('product-image-info').classList.remove('text-red-600');
+  $('product-image-info').classList.add('ink-muted');
   $('product-featured').checked = product ? Boolean(product.featured) : false;
   $('product-active').checked = product ? Boolean(product.active) : true;
 
-  renderPresetButtons();
   updateProductImagePreview();
   openModal('product-modal');
 }
@@ -641,7 +728,7 @@ function validateProductInput() {
   if (price === null || price < 0 || price > 10000000) errors.push('Harga harus bilangan bulat antara 0 dan 10.000.000.');
   if (stock === null || stock < 0 || stock > 10000) errors.push('Stok harus bilangan bulat antara 0 dan 10.000.');
   if (description.length < 10 || description.length > 500) errors.push('Deskripsi harus 10–500 karakter.');
-  if (imageUrl && !safeImageUrl(imageUrl)) errors.push('URL gambar harus diawali http://, https://, atau data:image/.');
+  if (imageUrl && !safeImageUrl(imageUrl)) errors.push('Gambar produk tidak valid. Unggah ulang file PNG atau JPG.');
 
   const duplicate = db.products.some(p =>
     p.sellerId === currentUser().id &&
@@ -688,10 +775,11 @@ export function handleProductSubmit(event) {
     toast('Produk baru berhasil ditayangkan.', 'success');
   }
 
-  saveDatabase();
+  const saved = saveDatabase();
   closeModal('product-modal');
   ui.editingProductId = null;
   renderSellerPanel();
+  if (!saved) toast('Gambar terlalu besar untuk penyimpanan browser. Coba file yang lebih kecil.', 'error');
 }
 
 export function confirmDeleteProduct(productId) {

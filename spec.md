@@ -43,7 +43,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 - Backend/API, database server, multi-perangkat.
 - Registrasi mandiri pembeli/seller dan verifikasi email.
 - Pembayaran, keranjang, ongkir, riwayat pesanan.
-- Unggah gambar ke storage; gambar memakai URL atau SVG preset yang di-embed.
+- Unggah gambar produk sebagai file PNG/JPG (maksimal 2 MB) yang dikompres di browser dan disimpan sebagai data URI; fallback ke SVG preset kategori.
 
 ---
 
@@ -99,7 +99,7 @@ Aplikasi kini berupa **proyek Vite vanilla JavaScript** yang dipecah menjadi mod
 
 ### 4.4 Seller — Kelola Produk
 1. Seller membuka tab **Produk Saya**; ringkasan statistik (total, tayang, stok menipis, habis, nilai inventaris) + tabel produk miliknya.
-2. **Tambah produk**: nama, kategori, harga, stok, deskripsi, gambar (URL/preset), unggulan, status tayang.
+2. **Tambah produk**: nama, kategori, harga, stok, deskripsi, gambar (unggah PNG/JPG maksimal 2 MB), unggulan, status tayang.
 3. **Edit / hapus** hanya untuk produk dengan `sellerId` miliknya.
 4. Stok 0 otomatis ditandai "Habis" dan tombol pesan dinonaktifkan di katalog pembeli.
 5. Perubahan langsung tersimpan ke localStorage dan terlihat di katalog pembeli.
@@ -203,7 +203,7 @@ Kunci penyimpanan:
 - Harga: bilangan bulat 0–10.000.000.
 - Stok: bilangan bulat 0–10.000.
 - Deskripsi: 10–500 karakter.
-- Gambar: URL `http(s)://`, `data:image/...`, atau kosong (memakai SVG preset sesuai kategori).
+- Gambar: unggah file PNG/JPG maksimal 2 MB, diperkecil ke sisi maksimal 1200 px lalu disimpan sebagai data URI; kosong berarti memakai SVG preset kategori.
 
 Semua pesan kesalahan ditampilkan inline di atas form (daftar) dan fokus ke field pertama yang salah.
 
@@ -233,7 +233,7 @@ Konsekuensi yang harus disadari:
 
 Mitigasi yang tetap diterapkan:
 - Semua string dari pengguna di-escape sebelum dirender.
-- URL gambar divalidasi skema (`http/https/data:image`), bukan `javascript:`.
+- Gambar divalidasi tipe (PNG/JPG) dan ukuran (maksimal 2 MB) sebelum disimpan; data URI di-escape saat dirender.
 - Tidak ada data sensitif di URL; pesan WhatsApp dibentuk dari data produk yang sudah tersimpan.
 - Audit log membantu penelusuran perubahan.
 
@@ -286,7 +286,7 @@ BakolSego/
 
 1. Backend (mis. Supabase/Postgres + Auth) dengan hashing argon2 dan cookie HttpOnly.
 2. Registrasi seller + verifikasi email/WhatsApp, moderasi admin.
-3. Unggah gambar ke object storage dengan kompresi sisi klien.
+3. Pindahkan gambar ke object storage agar tidak dibatasi kuota localStorage.
 4. Riwayat pesanan, status pesanan, dan integrasi WhatsApp Business API.
 5. Uji otomatis end-to-end (Playwright) untuk alur 3 peran.
 6. Logging & monitoring, backup data, serta kebijakan privasi.

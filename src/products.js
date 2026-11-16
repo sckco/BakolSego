@@ -6,7 +6,7 @@ export const CATEGORIES = ['Makanan Berat', 'Minuman', 'Camilan'];
 
 /**
  * Membuat gambar makanan lokal (data URI SVG) tanpa aset eksternal.
- * Dipakai sebagai gambar bawaan dan fallback saat URL gambar gagal dimuat.
+ * Dipakai sebagai gambar bawaan dan fallback saat gambar produk gagal dimuat.
  */
 export function createLocalFoodSvg(category, label) {
   const themes = {
@@ -34,7 +34,7 @@ export function createLocalFoodSvg(category, label) {
   return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim());
 }
 
-/** Hanya izinkan URL gambar http(s) dan data URI gambar. */
+/** Hanya izinkan URL gambar http(s) dan data URI gambar (termasuk hasil unggahan). */
 export function safeImageUrl(value) {
   const url = String(value ?? '').trim();
   if (!url) return '';

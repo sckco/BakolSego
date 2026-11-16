@@ -561,13 +561,18 @@
             </div>
 
             <div>
-              <label for="product-image" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Gambar (URL, opsional)</label>
-              <input id="product-image" type="text" placeholder="https://... atau kosongkan untuk gambar preset"
-                class="ios-input w-full px-3.5 py-2.5 text-sm font-medium rounded-2xl" />
-              <div id="product-preset-list" class="flex flex-wrap gap-2 mt-2"></div>
+              <label for="product-image-file" class="block text-xs font-extrabold uppercase tracking-wider ink-secondary mb-1.5">Gambar Produk (opsional)</label>
+              <input id="product-image-file" type="file" accept="image/png,image/jpeg,image/jpg"
+                class="ios-input w-full px-3.5 py-2 text-xs font-semibold rounded-2xl file:mr-3 file:px-3 file:py-1.5 file:rounded-xl file:border-0 file:bg-orange-600 file:text-white file:text-[11px] file:font-extrabold file:cursor-pointer cursor-pointer" />
+              <input id="product-image" type="hidden" />
+              <p id="product-image-info" class="text-[11px] font-medium ink-muted mt-1.5 leading-relaxed">PNG atau JPG, maksimal 2 MB. Gambar otomatis dikompres agar muat di penyimpanan lokal.</p>
               <div class="mt-2.5 flex items-center gap-3">
                 <img id="product-image-preview" alt="Pratinjau gambar produk" class="w-24 h-16 rounded-xl object-cover border ios-divider bg-slate-200" />
-                <p class="text-[11px] font-medium ink-muted leading-relaxed">Pratinjau gambar. Kosongkan URL untuk memakai preset kategori.</p>
+                <div class="space-y-1.5">
+                  <p class="text-[11px] font-medium ink-muted leading-relaxed">Kosongkan untuk memakai gambar preset kategori.</p>
+                  <button type="button" id="btn-clear-product-image" onclick="clearProductImage()"
+                    class="hidden ios-tap px-2.5 py-1.5 rounded-lg bg-red-600 text-white text-[11px] font-extrabold">Hapus gambar</button>
+                </div>
               </div>
             </div>
 

@@ -28,7 +28,7 @@ Saat pertama dibuka, pengunjung langsung melihat **katalog publik** tanpa perlu 
 | Peran | Yang bisa dilakukan |
 | :--- | :--- |
 | 🛡️ **Admin** | Buat, ubah, nonaktifkan, dan hapus akun; reset password; atur nomor WhatsApp admin; lihat audit log; reset data demo |
-| 🏪 **Seller** | Tambah, edit, hapus produk **miliknya sendiri**; atur harga, stok, kategori, gambar, dan label unggulan |
+| 🏪 **Seller** | Tambah, edit, hapus produk **miliknya sendiri**; atur harga, stok, kategori, unggah gambar PNG/JPG (maks 2 MB), dan label unggulan |
 | 🛒 **Pembeli** | Cari produk/toko, filter kategori, urutkan, lihat detail, lalu checkout langsung ke WhatsApp seller |
 | 👀 **Pengunjung** | Lihat katalog dan detail produk tanpa login; diarahkan masuk/daftar saat mencoba memesan |
 | 🆕 **Pendaftaran** | Daftar mandiri sebagai pembeli memakai email **@gmail.com**, langsung masuk ke katalog setelah akun dibuat |
